@@ -8,10 +8,10 @@ Welcome to Firely Terminal's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Firely Docs
+   :caption: Firely Products
    :hidden:
 
-   Back to all Firely Docs <https://docs.fire.ly>
+   Back to all Firely Products <https://docs.fire.ly>
 
 .. image:: ./images/Firely-Terminal-illustration.jpg
   :align: right
