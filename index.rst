@@ -16,16 +16,21 @@ Welcome to Firely Terminal's documentation!
 .. image:: ./images/Firely-Terminal-illustration.jpg
   :align: right
   :width: 250px
+  :alt: Illustration of Firely Terminal
   
 Firely Terminal (formerly known as Torinox) is a cross platform FHIR command line tool that helps you working with files containing FHIR resources.
 
 We are currently migrating the documentation here. Until that is complete you can find the `documentation for Firely Terminal on Simplifier.net <https://simplifier.net/docs/firelyterminal>`_.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Firely Terminal Docs:
 
    InstallingFirelyTerminal
+   Usingnpminstead
+
+Quick Overview
+~~~~~~~~~~~~~~
 
 .. raw:: html
 
