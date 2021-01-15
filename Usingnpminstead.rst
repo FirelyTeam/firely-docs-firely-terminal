@@ -24,9 +24,9 @@ this example we’ll install package ``hl7.fhir.r4.core``.
 
 .. code-block:: Bash
 
-   npm create
-   npm --registry https://packages.simplifier.net install hl7.fhir.r4.core
-   npm --registry https://packages.simplifier.net install 
+   > npm create
+   > npm --registry https://packages.simplifier.net install hl7.fhir.r4.core
+   > npm --registry https://packages.simplifier.net install 
 
 Simplifier as default npm package server
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

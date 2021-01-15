@@ -27,7 +27,9 @@ We are currently migrating the documentation here. Until that is complete you ca
    :caption: Firely Terminal Docs:
 
    InstallingFirelyTerminal
-   Usingnpminstead
+   CommonScenarios
+   Commands
+   UsingNPMInstead
 
 Quick Overview
 ~~~~~~~~~~~~~~
