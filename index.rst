@@ -29,7 +29,7 @@ We are currently migrating the documentation here. Until that is complete you ca
    InstallingFirelyTerminal
    CommonScenarios
    Commands
-   UsingNPMInstead
+   Using-NPM-instead
 
 Quick Overview
 ~~~~~~~~~~~~~~
