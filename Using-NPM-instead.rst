@@ -37,6 +37,6 @@ that with NPM. We recommend you only do that if you don’t need npm for
 
 .. code-block:: Bash
 
-   npm config set registry https://packages.simplifier.net/
-   npm install hl7.fhir.r4.core
-   npm install 
+   > npm config set registry https://packages.simplifier.net/
+   > npm install hl7.fhir.r4.core
+   > npm install 

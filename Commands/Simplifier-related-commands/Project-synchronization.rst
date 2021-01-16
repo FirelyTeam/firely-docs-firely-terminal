@@ -7,8 +7,7 @@ You can keep a local folder in sync with a project in Simplifier by
 using the ``sync`` command. For that it uses the zip api endpoint of
 Simplifier.
 
-In order to sync with a project in Simplifier, you have to be logged in.
-Read more on this here: {{link:loggingin}}.
+In order to sync with a project in Simplifier, you have to be :ref:`logged in <login>`.
 
 Synchronization has several options.
 

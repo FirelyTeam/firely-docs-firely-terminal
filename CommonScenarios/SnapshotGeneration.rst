@@ -1,7 +1,7 @@
 Snapshot Generation
 ===================
 
-To generate a snapshot for a StructureDefinition, Torinox needs to have
+To generate a snapshot for a StructureDefinition, Firely Terminal needs to have
 two thing in place:
 
 1. Get a StructureDefinition

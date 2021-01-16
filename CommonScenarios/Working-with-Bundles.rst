@@ -1,7 +1,7 @@
 Working with Bundles
 ====================
 
-With Torinox you can bundle a set of resources or tear a bundle apart.
+With Firely Terminal you can bundle a set of resources or tear a bundle apart.
 
 Bundle all resources in a folder
 --------------------------------

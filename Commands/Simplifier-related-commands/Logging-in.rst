@@ -1,5 +1,7 @@
-Login with Torinox into Simplifier
-----------------------------------
+.. _login:
+
+Login with Firely Terminal into Simplifier
+------------------------------------------
 
 Several api endpoints in Simplifier require you to login first. By
 logging in, Firely Terminal gives you access to most of these endpoints:
@@ -9,7 +11,7 @@ logging in, Firely Terminal gives you access to most of these endpoints:
 -  fhir endpoint
 -  writing (post and put) to private fhir endpoinds
 
-In order to login with Torinox use the ``login`` command:
+In order to login with Firely Terminal use the ``login`` command:
 
 .. code-block:: Bash
 

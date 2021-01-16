@@ -3,7 +3,7 @@ How to use the resource stack
 
 Firely Terminal was build with an internal stack, to allow you to
 combine multiple actions on one or more resources. All resource
-operations in Torinox are performed on that stack.
+operations in Firely Terminal are performed on that stack.
 
 We have provided as many as possible atomic operations, so that you can
 combine them yourself and give you much more flexibility. This way you
@@ -13,7 +13,7 @@ bundling them before pushing them to a different server.
 Using the stack
 ~~~~~~~~~~~~~~~
 
-The resource stack of Torinox is just like a stack in a your computer.
+The resource stack of Firely Terminal is just like a stack in a your computer.
 You can add stuff to the top, and if you perform operations, they do
 that with the resource or resources on top of the stack.
 
@@ -66,7 +66,7 @@ But also saving files:
 -------------
 
 In a classical (number) stack, you would use plus, minues or times. With
-torinox you get FHir operations like switching the top two resources:
+Firely Terminal you get FHir operations like switching the top two resources:
 
 .. code-block:: Bash
 

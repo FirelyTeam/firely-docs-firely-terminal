@@ -1,12 +1,12 @@
 XML to JSON and vice versa
 ==========================
 
-With Torinox you can save a FHIR resource either as JSON or XML. This
+With Firely Terminal you can save a FHIR resource either as JSON or XML. This
 also allows you to convert from one format to the other. Here are some
 examples.
 
 In order to allow you to perform multiple operations on a resource,
-Torinox works with an internal stack where you push your resources to.
+Firely Terminal works with an internal stack where you push your resources to.
 In case of converting to another format, you just have to save those
 resources from the stack to the preferred format.
 
@@ -32,7 +32,7 @@ And save it as json:
 
    > fhir save mypatient.json
 
-Torinox will automatically recognize from the target file extension that
+Firely Terminal will automatically recognize from the target file extension that
 you want to transform the resource JSON.
 
 Converting a file to XML
