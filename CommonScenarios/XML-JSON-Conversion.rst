@@ -57,5 +57,9 @@ Getting JSON files out a of an XML server:
 ------------------------------------------
 
 In the example here, use your own alias and of course a different URL:
-\``\` > fhir server add myserver https://myxmlfhirserver.com/fhir/ >
-fhir search myserver Patient \_count=20 > fhir save –all –json
+
+.. code-block:: Bash
+
+   > fhir server add myserver https://myxmlfhirserver.com/fhir/
+   > fhir search myserver Patient _count=20
+   > fhir save --all --json
