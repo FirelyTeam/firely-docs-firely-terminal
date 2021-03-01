@@ -1,10 +1,9 @@
 Expand
 ------
 
-.. image:: https://img.shields.io/badge/Simplifier.net%20plan-Professional%20and%20higher-green
-    :alt: Simplifier.net plan: Professional and higher
-    :target: https://simplifier.net/pricing
+.. important::
 
+    `This feature is available from the Professional plan and up <https://simplifier.net/pricing>`_.
 
 Expand takes the ValueSet on top of the stack, and uses the current
 :ref:`Scope` to expand all the codes in the ValueSet The resulting
