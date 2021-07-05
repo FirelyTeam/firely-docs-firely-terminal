@@ -12,9 +12,9 @@ Other operations are:
 
 .. code-block:: Bash
 
-     > fhir logout            Clears the credentials for Simplifier.net
-     > fhir license           List the features in your license
-     > fhir doc <canonical>   Brings you to the documentation page of the resource
+     > fhir logout            #Clears the credentials for Simplifier.net
+     > fhir license           #List the features in your license
+     > fhir doc <canonical>   #Brings you to the documentation page of the resource
 
 After a succesfull login you can use the ``projects`` command to list all your projects on Simplifier
 
@@ -26,11 +26,11 @@ You can perform the following commands with you projects:
 
 .. code-block:: Bash
 
-     > fhir project clone <project>     Clones a project form Simplifier.net in a sub folder
-     > fhir project update              Synchornizes you project with a specific folder
-     > fhir project sync                Synchronizes current folder with the corresponding Simplfier project
-     > fhir push                        Pushes all changes to the corresponding project on Simplifier
-     > fhir pack                        Creates a package from the current project
+     > fhir project clone <project>     #Clones a project form Simplifier.net in a sub folder
+     > fhir project update              #Synchornizes you project with a specific folder
+     > fhir project sync                #Synchronizes current folder with the corresponding Simplfier project
+     > fhir push                        #Pushes all changes to the corresponding project on Simplifier
+     > fhir pack                        #Creates a package from the current project
 
 The intended workflow is as follows: 
 

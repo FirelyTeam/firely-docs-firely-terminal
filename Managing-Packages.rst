@@ -148,9 +148,9 @@ Other Commands
 
 .. code-block:: Bash
 
-  > fhir contents       Displays the content from a packages
-  > fhir pack           Creates a FHIR package from a folder
-  > fhir init           Generates a FHIR package manifest 
-  > fhir restore        Restores all packages referenced in this folders package file 
-  > fhir canonicals     Lists canonicals from resources in a package or scope 
-  > fhir find           Searches for package(s) by name or canonical
+  > fhir contents       #Displays the content from a packages
+  > fhir pack           #Creates a FHIR package from a folder
+  > fhir init           #Generates a FHIR package manifest 
+  > fhir restore        #Restores all packages referenced in this folders package file 
+  > fhir canonicals     #Lists canonicals from resources in a package or scope 
+  > fhir find           #Searches for package(s) by name or canonical

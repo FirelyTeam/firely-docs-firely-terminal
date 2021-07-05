@@ -26,10 +26,10 @@ To install Firely Terminal please go to the `Firely Terminal download page <http
    :caption: Firely Terminal documentation:
 
    Quick-Overview
+   InstallingFirelyTerminal
    FHIR-Client
    Simplifier-Sync
    Resource-Operations
-   Linux-and-Mac
    Managing-Packages
    Using-NPM-instead
    Github-Pipeline

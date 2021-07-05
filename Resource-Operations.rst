@@ -28,13 +28,13 @@ You can select a resource from disk:
 
 .. code-block:: Bash
 
-   > fhir push      Pushes matching files or server resources on the stack
+   > fhir push      #Pushes matching files or server resources on the stack
 
 You can get a file from a FHIR server:
 
 .. code-block:: Bash
   
-   > fhir read firely.server Patient name=Chalmers
+   > fhir read firely Patient name=Chalmers
 
 It is also possible to duplicate the top resource on the stack:
 
@@ -68,16 +68,16 @@ as shown below:
 
 .. code-block:: Bash
 
-   > fhir save      Saves the file to disk
-   > fhir filter    Filters the stack on matching FhirPath expressions
-   > fhir reverse   Reverses the order of all resources on the stack
-   > fhir sort      Sorts the stack based on the expression
-   > fhir swap      Swaps the top 2 elements on the stack
-   > fhir show      Displays a resource tree from a file or the top of the stack
-   > fhir stack     Lists the items on the stack
-   > fhir bundle    Takes all resources on the stack and puts them into a single bundle
-   > fhir split     Splits the bundle on the top of the stack into separate resources
-   > fhir peek      Displays the top item on the stack
+   > fhir save      #Saves the file to disk
+   > fhir filter    #Filters the stack on matching FhirPath expressions
+   > fhir reverse   #Reverses the order of all resources on the stack
+   > fhir sort      #Sorts the stack based on the expression
+   > fhir swap      #Swaps the top 2 elements on the stack
+   > fhir show      #Displays a resource tree from a file or the top of the stack
+   > fhir stack     #Lists the items on the stack
+   > fhir bundle    #Takes all resources on the stack and puts them into a single bundle
+   > fhir split     #Splits the bundle on the top of the stack into separate resources
+   > fhir peek      #Displays the top item on the stack
 
 Snapshot Generation
 ~~~~~~~~~~~~~~~~~~~~
@@ -95,7 +95,7 @@ definition from a server or from disk;
 
 .. code-block:: Bash
 
-     > fhir read Vonk StructureDefinition/Patient
+     > fhir read firely StructureDefinition/Patient
 
 Create a scope
 --------------
