@@ -26,7 +26,7 @@ To install Firely Terminal please go to the `Firely Terminal download page <http
    :caption: Firely Terminal documentation:
 
    Quick-Overview
-   InstallingFirelyTerminal
+   Installing-Firely-Terminal
    FHIR-Client
    Simplifier-Sync
    Resource-Operations
