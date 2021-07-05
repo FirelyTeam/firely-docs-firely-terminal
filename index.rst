@@ -18,24 +18,25 @@ Welcome to Firely Terminal's documentation!
   :width: 250px
   :alt: Illustration of Firely Terminal
   
-Firely Terminal (formerly known as Torinox) is a cross platform FHIR command line tool that helps you working with files containing FHIR resources.
+Firely Terminal is a cross platform FHIR command line tool that helps you working with files containing FHIR resources.
+To install Firely Terminal please go to the `Firely Terminal download page <https://simplifier.net/downloads/firely-terminal>`_ and follow the instructions.
 
 .. toctree::
    :maxdepth: 1
-   :caption: Firely Terminal Docs:
+   :caption: Firely Terminal documentation:
 
-   InstallingFirelyTerminal
-   CommonScenarios
-   Commands
+   Quick-Overview
+   FHIR-Client
+   Simplifier-Sync
+   Resource-Operations
+   Linux-and-Mac
+   Managing-Packages
    Using-NPM-instead
+   Github-Pipeline
+   
 
-Quick Overview
-~~~~~~~~~~~~~~
 
-.. raw:: html
+ 
 
-    <div style="position: relative; margin-bottom: 2em; overflow: hidden; max-width: 100%; height: auto;">
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/ukD9VR0lOVM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </div>
+   
 
-For questions or feedback on Firely Terminal, please send an email to simplifier@fire.ly.

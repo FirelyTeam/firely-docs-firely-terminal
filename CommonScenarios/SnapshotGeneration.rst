@@ -4,7 +4,7 @@ Snapshot Generation
 To generate a snapshot for a StructureDefinition, Firely Terminal needs to have
 two thing in place:
 
-1. Get a StructureDefinition
+Get a StructureDefinition
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A snapshot on the stack. You can do this by fetching a structure
@@ -14,7 +14,7 @@ definition from a server or from disk;
 
      > fhir read Vonk StructureDefinition/Patient
 
-2. Create a scope
+Create a scope
 ~~~~~~~~~~~~~~~~~
 
 You also need a *scope* for resolving resources and data types. You can
