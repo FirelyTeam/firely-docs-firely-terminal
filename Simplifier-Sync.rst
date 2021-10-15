@@ -29,7 +29,7 @@ You can perform the following commands with you projects:
      > fhir project clone <project>     #Clones a project form Simplifier.net in a sub folder
      > fhir project update              #Synchornizes you project with a specific folder
      > fhir project sync                #Synchronizes current folder with the corresponding Simplfier project
-     > fhir push                        #Pushes all changes to the corresponding project on Simplifier
+     > fhir project push                #Pushes all changes to the corresponding project on Simplifier
      > fhir pack                        #Creates a package from the current project
 
 The intended workflow is as follows: 
