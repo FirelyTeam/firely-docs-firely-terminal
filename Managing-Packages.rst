@@ -1,18 +1,28 @@
-Packages
-========
+Package Management
+===================
 
 Firely Terminal is a FHIR package manager. The following commands are available to manage them.
 
-Packages are the core distribution mechanism for sets of profiles. Profiles and other conformance 
+Packages are the core distribution mechanism for sets of profiles and the recommended way to do resource versioning. Profiles and other conformance 
 resources rarely live in isolation. Together they form a use case, and they usually need other resources 
 from a national initiative, and they certainly need the FHIR core base profiles.
 
 In FHIR these sets are distributed according to the `FHIR package standard <https://confluence.hl7.org/display/FHIR/NPM+Package+Specification>`_, 
-which conforms largely with the `NPM package standard <https://www.npmjs.com/>`_. There are a few additions and a 
+which is based on, but does not conform to, `NPM package standard <https://www.npmjs.com/>`_. There are a few additions and a 
 few restrictions.
 
 One of the core problems when distributing profiles, is choosing the right version. And since profiles often 
 reference eachother, you need all the ones that are of the same release. For that, packages are ideal.
+
+Expansions and Snapshots
+------------------------
+All the Firely tools will create snapshots and expansions on the fly. Some tooling does not have this capability and can only use packages that already contain snapshots and/or expansions. We do not recommend using snapshots in a package since this may result in out dated snapshots in packages where by definition the content does not change. With the introduction of the bake pipeline we allow customization at package creation! You can start this easily on Simplifier by creating a ``package.bake.yaml`` file or create you own yaml file. 
+
+The sytax for creating your bake file is explained `here in our documentation <https://simplifier.net/docs/bake>`_. As you can see in the documentation there are a variety of options available. Besides the snapsthots and expansions, there are options for selecting a subset of resources, creating an .index.json file and transforming FHIR Shorthand files are available in the bake pipeline. 
+
+It is also possible to create snapshots and expand valuesets for already existing packages by using the ``fhir inflate`` command. Inflate creates snapshots and/or expansions for the current project (or a specific package).
+
+**WARNING** ``fhir inflate`` changes the content of your current profiles and ValueSets permanently. If you want to do the opposite you can use ``fhir deflate`` to remove snapshots and expansions from you current project (or a specific package). 
 
 Versions
 --------
