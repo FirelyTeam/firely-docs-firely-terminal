@@ -34,6 +34,8 @@ To install Firely Terminal please go to the `Firely Terminal download page <http
    Using-NPM-instead
    Quality-Control
    Github-Pipeline
+   Release-Notes
+
    
 
 
