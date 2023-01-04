@@ -1,13 +1,13 @@
 Release Notes
 =============
 
-This page contain the release notes of the current major version of Firely Terminal (v3).
+This page contains the release notes of the current major version of Firely Terminal (v3).
 
 Release 3.1.0, November 21th, 2022
------------------------------------
+----------------------------------
 
-Feature
-^^^^^^^
+Features
+^^^^^^^^
 
 #. The command ``project pack`` has been renamed to ``project archive``. The ``project archive`` command creates a zipped folder from the current project.
 #. The original ``bake`` command has been renamed to ``inflate``. The ``inflate`` command creates snapshots and expands ValueSets for a project or package. When installing packages an inflate happens in the background for that package and for all dependencies.
