@@ -3,16 +3,16 @@ Release Notes
 
 This page contain the release notes of the current major version of Firely Terminal (v3).
 
-Release 3.10.0, November 21th, 2022
+Release 3.1.0, November 21th, 2022
 -----------------------------------
 
 Feature
 ^^^^^^^
 
-#. The command ``project pack`` has been renamed to ``project archive``. The ``project archive`` command creates an archive from the current project.
+#. The command ``project pack`` has been renamed to ``project archive``. The ``project archive`` command creates a zipped folder from the current project.
 #. The original ``bake`` command has been renamed to ``inflate``. The ``inflate`` command creates snapshots and expands ValueSets for a project or package. When installing packages an inflate happens in the background for that package and for all dependencies.
 #. The original ``unbake`` command has been renamed to ``deflate``. The ``deflate`` command removes snapshots/expansions for a project or package.
-#. For publishing packages you can now use ``bake`` to publish your package to a given folder and ``pack`` to create a FHIR package .tgz from a folder.
+#. For publishing packages you can now use ``bake`` to publish your package to a given folder. The output folder is located by default in the subfolder /.bake. The ``pack`` command can be used to create a FHIR package .tgz from a folder.
 
 
 Bugfixes
