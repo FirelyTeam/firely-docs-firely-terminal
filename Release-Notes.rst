@@ -37,21 +37,21 @@ This is first release that is based on .NET 6, until now Firely Terminal worked 
 Features
 ^^^^^^^^
 
-1. Firely Terminal was upgraded to .NET 6, meaning that it is necessary to install the .NET 6 SDK in order to upgrade the new Firely Terminal.
+1. Firely Terminal was upgraded to .NET 6, meaning that it is necessary to install .NET 6 in order to upgrade the new Firely Terminal.
 2. Bake: This release brings the first version of the Bake Pipeline. It is only available as a licensed feature.
-3. Packages: You can now install a package from a package (tgz) file. Firely Terminal can now also properly use a local local cache inside of your project folder using the ``--here`` parameter.
-4. YAML Gen: We have added the ``yaml-gen`` command, A YAML resource parser for generating FHIR example resources. The engine is integrated with an agnostic version of our prior automatic example generator, so that you can now mix and match. This tooling is also available in the Simplifier playground.
-5. Quality Control: You can now specify the level of reporting.
-6. Simplifier synchronization: It is now possible to synchronize between a folder and a project on simplifier. Commands include ``project link`` and ``project unlink``.
-7. Several commands were added to Firely Terminal, including:
+3. Packages: You can now install a package from a package (tgz) file. Firely Terminal can now use a local local cache inside of your project folder using the ``--here`` parameter.
+4. Quality Control: You can now specify the level of reporting for performing QC.
+5. Simplifier synchronization: It is now possible to synchronize between a folder and a project on simplifier. Commands include ``project link`` and ``project unlink``.
+6. Several commands were added to Firely Terminal, including:
      - Filter: with the ``filter`` command it is now possible to filter resources in the resource stack, or a folder on disk, using FHIRpath.
-     - Sorting: ``sort`` was added tp sort the order of a stack.
-     - Reverse: the ``reverse`` commanc has been added to reverse the order of the stack.
+     - YAML Gen: We have added the ``yaml-gen`` command, A YAML resource parser for generating FHIR example resources. The engine is integrated with an agnostic version of our prior automatic example generator, so that you can now mix and match. This tooling is also available in the Simplifier playground.
+     - Sorting: ``sort`` was added to sort the order of a stack.
+     - Reverse: the ``reverse`` command has been added to reverse the order of the stack.
      - File deletion: with ``file delete`` you can delete resources in your folder based on a fhirpath expression.
      - Expand: ``expand`` was added to expand a valueset.
      - Predicate: The ``predicate`` gives the result (true/false) of FHIRpath predicate on a resource.
-8. FQL4: This version contains the first experimental version of FQL 4, with the following features:
-     - A select only statement. In the past, to select all resources in scope, you had to start with from Resource. Now you can just write select immediatly, giving consise scripts.
+7. FQL4: This version contains the first experimental version of FQL 4, with the following features:
+     - A select only statement. In the past, to select all resources in scope, you had to start with ``from Resource``. Now you can just write ``select`` immediatly, giving consise scripts.
      - Our table renderer now recognizes links as an ITypedElement node that contains an ``href`` field.
      - You can use the ``typename()`` function to get the type of the current node.
      - Fetch Queries: you have access to resources that are referenced in the current selection. The fetch operator jumps from a reference node to the resource it references.
