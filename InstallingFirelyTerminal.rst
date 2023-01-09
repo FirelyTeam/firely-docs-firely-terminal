@@ -22,8 +22,8 @@ Firely Terminal can be used cross platform. For Linux and Mac you need to make s
 
 The workflow for both platforms: 
 
-1. Make sure you have installed .NET SDK 3.1. 
-    - You can have other versions of the SDK and runtimes, but you should at least have 3.1. 
+1. Make sure you have installed .NET SDK 6 if you are using Firely terminal 3.0.0 or later versions.
+    - You can have other versions of the SDK and runtimes, but you should at least have .NET 3.1 for FT versions < 3.0.0 and .NET 6.0 for FT versions >= 3.0.0. 
 
 2. Install Firely Terminal using the `Firely Terminal download command <https://simplifier.net/downloads/firely-terminal>`_
     - ``dotnet tool install -g firely.terminal``
