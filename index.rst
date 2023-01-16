@@ -25,15 +25,10 @@ To install Firely Terminal please go to the `Firely Terminal download page <http
    :maxdepth: 1
    :caption: Firely Terminal documentation:
 
-   Quick-Overview
-   InstallingFirelyTerminal
-   FHIR-Client
-   Simplifier-Sync
-   Resource-Operations
-   Managing-Packages
-   Using-NPM-instead
+   Getting started <getting_started/getting_started>
+   Package management <package_management/package_management>
    Quality-Control
-   Github-Pipeline
+   Additional features <additional_features/additional_features>
    Release-Notes
 
    
