@@ -3,6 +3,8 @@
 Additional features
 ===================
 
+Here you will find information on the additional features of Firely Terminal.
+
 .. toctree::
   :maxdepth: 1
   :titlesonly:

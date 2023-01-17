@@ -6,4 +6,4 @@ Although the primary goal is to make tables from FHIR data, FQL can be used in a
 
     > fhir query "from Patient select name.given"
 
-For more extensive documentation on FQL, see the link to `the Simplifier.net documentation <https://simplifier.net/docs/fql/home>`_.
+For more extensive documentation on FQL, see the link to `the Simplifier.net FQL documentation <https://simplifier.net/docs/fql/home>`_.
