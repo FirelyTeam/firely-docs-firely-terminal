@@ -38,5 +38,5 @@ The workflow for both platforms:
 Trouble shooting
 ~~~~~~~~~~~~~~~~
 After installing the .NET SDK you might have to reload your shell in order for 'dotnet' to be in your PATH. 
-Sometimes you will have to manually add 'fhir'  by adding ``~/.donet/tools`` to your PATH. For more information please see the `.NET documentation. <https://docs.microsoft.com/en-us/dotnet/core/tools/troubleshoot-usage-issues#global-tools>`
+Sometimes you will have to manually add 'fhir'  by adding ``~/.dotnet/tools`` to your PATH. For more information please see the `.NET documentation. <https://docs.microsoft.com/en-us/dotnet/core/tools/troubleshoot-usage-issues#global-tools>`
 
