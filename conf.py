@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Firely Terminal'
-copyright = '2021, Firely'
+copyright = '2023, Firely'
 author = 'Firely'
 
 
