@@ -1,18 +1,7 @@
 Package Management
 ===================
 
-Firely Terminal is a FHIR package manager. The following commands are available to manage them.
-
-Packages are the core distribution mechanism for sets of profiles and the recommended way to do resource versioning. Profiles and other conformance 
-resources rarely live in isolation. Together they form a use case, and they usually need other resources 
-from a national initiative, and they certainly need the FHIR core base profiles.
-
-In FHIR these sets are distributed according to the `FHIR package standard <https://confluence.hl7.org/display/FHIR/NPM+Package+Specification>`_, 
-which is based on, but does not conform to, `NPM package standard <https://www.npmjs.com/>`_. There are a few additions and a 
-few restrictions.
-
-One of the core problems when distributing profiles, is choosing the right version. And since profiles often 
-reference eachother, you need all the ones that are of the same release. For that, packages are ideal.
+Below you will find more information on the available commands for package management within Firely Terminal
 
 Expansions and Snapshots
 ------------------------
