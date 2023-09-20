@@ -14,7 +14,7 @@ Features
 ^^^^^^^^
 
 #. Bake: We upgraded the ``bake`` engine.
-#. Quality Control: We Upgraded the Quality Control engine.
+#. Quality Control: We upgraded the Quality Control engine.
 #. Inflate: We improved the behavior of the ``inflate`` function. If snapshots are already present in a resource these will no longer be regenerated.  We also added an option to turn off inflate completely, using ``config inflate``.
 #. NDJSON: Firely Terminal can now read NDJSON from files or from a URL, and push it on the stack or write it to disk.
 #. Monochrome  output: We have added support for monochrome output, which is especially usefull for our Mac users.
