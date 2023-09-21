@@ -13,11 +13,11 @@ Release 3.2.0-beta-1, September 19th, 2023
 Features
 ^^^^^^^^
 
-#. Bake: We upgraded the ``bake`` engine.
-#. Quality Control: We upgraded the Quality Control engine.
+#. The engine running behind the ``bake`` command was upgraded.
+#. The Quality Control engine was upgraded.
 #. Inflate: We improved the behavior of the ``inflate`` function. If snapshots are already present in a resource these will no longer be regenerated.  We also added an option to turn off inflate completely, using ``config inflate``.
 #. NDJSON: Firely Terminal can now read NDJSON from files or from a URL, and push it on the stack or write it to disk.
-#. Monochrome  output: We have added support for monochrome output, which is especially usefull for our Mac users.
+#. Monochrome  output: We have added support for monochrome output, which is especially usefull for our macOS users.
 #. We have added several commands to compare two files: ``diff`` and ``contentdiff``. These are still experimental features.
 
 Bugfixes
@@ -25,9 +25,9 @@ Bugfixes
 
 #. The ``bundle`` command had a bug where the stack was cleared if you would set a number of resources higher than those present in the stack to the ``--take`` parameter. This is now fixed.
 #. Fixed an issue with the ``deflate`` command not working properly.
-#. Fixed an issue for r4b resources where an error would pop up after running ``fhir spec r4b`` and next ``fhir init``. 
+#. Fixed an issue for R4B resources where an error would pop up after running ``fhir spec r4b`` and next ``fhir init``. 
 #. The ``inflate`` command only worked for packages, but not for projects. This is now fixed.
-#. When using the ``search`` command any additional parameters would not be taken into account when performing the search. this is now fixed.
+#. When using the ``search`` command any additional parameters would not be taken into account when performing the search. This is now fixed.
 #. Fixed an issue with the ``yaml`` command that was caused by Firely Terminal not providing a scope for resolving resources.
  
 
