@@ -7,7 +7,7 @@ This page contains the release notes of the current major version of Firely Term
 Current Release
 ~~~~~~~~~~~~~~~
 
-Release 3.2.0-beta-1, September 19th, 2023
+Release 3.2.0-beta-1, September 18th, 2023
 ------------------------------------------
 
 Features
