@@ -1,5 +1,3 @@
-.. _package_management:
-
 Package Management
 ===================
 

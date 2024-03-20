@@ -31,7 +31,7 @@ extensions = ['sphinx.ext.intersphinx']
 
 intersphinx_mapping = {
     'main_docs': ('https://docs.fire.ly', None),
-    'firely_net_sdk_docs': ('https://docs.fire.ly/projects/Firely-NET-SDK/', None),
+    'firely_net_sdk_docs': ('https://docs.fire.ly/projects/Firely-NET-SDK//en/latest/', None),
     'simplifier_docs': ('https://docs.fire.ly/projects/Simplifier/', None)}
 
     

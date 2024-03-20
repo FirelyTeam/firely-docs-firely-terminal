@@ -85,7 +85,7 @@ To generate a snapshot for a StructureDefinition, Firely Terminal needs to have
 two thing in place: 
 
 1. A StructureDefinition has to be on the stack. 
-2. The :ref:`scope <Stack_scope>` needs to be set. 
+2. The :ref:`scope <scope>` needs to be set. 
 
 Get a StructureDefinition
 -------------------------
@@ -125,7 +125,10 @@ After this the resource on the stack is replaced with a new
 StructureDefinition that contains the just generated snapshot.
 
 The validate command validates the resource on the top of the stack,
-using the current :ref:`Scope`.
+using the current :ref:`scope`.
+
+
+.. _scope:
 
 Scope
 -----
