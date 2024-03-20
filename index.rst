@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-.. _home:
+.. _firely_terminal_home:
 
 Welcome to Firely Terminal's documentation!
 ===========================================
