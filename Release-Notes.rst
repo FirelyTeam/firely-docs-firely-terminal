@@ -15,7 +15,7 @@ The latest release of our command-line FHIR pocket knife brings the new .NET Val
 Features
 ^^^^^^^^
 
-#. **New .NET Validator**: The .NET Validator is now the default validator, aligning validation and Quality Control behavior with Simplifier and Forge. Validator configuration options have been updated accordingly.
+#. **New .NET Validator**: The new .NET Validator is now the default validator, aligning validation and Quality Control behavior with Simplifier and Forge. Validator configuration options have been updated accordingly.
 #. **Ignore file for Firely Terminal sync**: Firely Terminal now supports the ``.simplifierupload`` file, allowing you to specify which files should or should not be synchronized with Simplifier.
 #. **Working with feeds**: Improved support for working with FHIR package feeds, making it easier to manage and consume packages from custom or private feeds.
 #. **Installing private packages**: Improved support for installing private FHIR packages from your package feeds.
