@@ -7,6 +7,32 @@ This page contains the release notes of the current major version of Firely Term
 Current Release
 ~~~~~~~~~~~~~~~
 
+Release 3.5.0, February 20th, 2026
+------------------------------------
+
+The latest release of our command-line FHIR pocket knife brings the new .NET Validator, to align its validation and quality control with Simplifier and Forge. Furthermore it has improved support for installing private FHIR packages from your package feeds and it supports the new ``.simplifierupload`` file, which allows you to customize what files should or should not be synchronized with Simplifier. With this, Firely Terminal is the ideal partner for all your AI FHIR work, giving your models direct access to full blown FHIR validation and transformation.
+
+Features
+^^^^^^^^
+
+#. **New .NET Validator**: The new .NET Validator is now the default validator, aligning validation and Quality Control behavior with Simplifier and Forge. Validator configuration options have been updated accordingly.
+#. **Ignore file for Firely Terminal sync**: Firely Terminal now supports the ``.simplifierupload`` file, allowing you to specify which files should or should not be synchronized with Simplifier.
+#. **Working with feeds**: Improved support for working with FHIR package feeds, making it easier to manage and consume packages from custom or private feeds.
+#. **Installing private packages**: Improved support for installing private FHIR packages from your package feeds.
+#. **``fhir select`` works with all data types**: The ``fhir select`` command now correctly handles all FHIR data types.
+#. **FQL 5**: Firely Terminal has been upgraded to FQL 5.
+#. **YAML 5.1**: Upgraded YAML support to version 5.1, which allows extensions on values in YAML-based resources.
+#. **Improved closure analysis**: Closure analysis has been improved and now includes error reporting.
+
+Bugfixes
+^^^^^^^^
+
+#. Various bugfixes and stability improvements.
+
+
+Previous releases
+~~~~~~~~~~~~~~~~~
+
 Release 3.2.0-beta-1, September 18th, 2023
 ------------------------------------------
 
@@ -30,9 +56,6 @@ Bugfixes
 #. When using the ``search`` command any additional parameters would not be taken into account when performing the search. This is now fixed.
 #. Fixed an issue with the ``yaml`` command that was caused by Firely Terminal not providing a scope for resolving resources.
  
-
-Previous releases
-~~~~~~~~~~~~~~~~~
 
 Release 3.1.0, November 21th, 2022
 ----------------------------------
