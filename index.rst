@@ -30,6 +30,7 @@ To install Firely Terminal please go to the `Firely Terminal download page <http
    Getting started <getting_started/getting_started>
    Package management <package_management/package_management>
    Quality-Control
+   Command Reference <Command-Reference>
    Additional features <additional_features/additional_features>
    Release-Notes
 
