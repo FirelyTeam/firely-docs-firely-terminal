@@ -1,10 +1,12 @@
 .. _working_with_simplifier:
+.. _simplifier_sync:
 
 Working with Simplifier
-~~~~~~~~~~~~~~~~~~~~~~~
+=======================
 
-This page describes the typical flow for getting a Simplifier.net project onto your machine and keeping
-the two in sync. See :ref:`simplifier_sync` and the :ref:`command_reference` for all available commands.
+You can interact with Simplifier.net from Firely Terminal to work with your own FHIR resources.
+This page describes the typical flow for getting a Simplifier.net project onto your machine and
+keeping the two in sync. See the :ref:`command_reference` for all available commands.
 
 1. Log in
 ---------
@@ -17,6 +19,14 @@ Almost every project command talks to Simplifier.net on your behalf, so start by
 
 If you leave out the parameters, they will be asked interactively and your password stays hidden.
 The login token is stored, so you only have to do this once per machine.
+
+Related commands:
+
+.. code-block:: Bash
+
+     > fhir logout            #clears the credentials for Simplifier.net
+     > fhir license           #lists the features in your license
+     > fhir doc <canonical>   #brings you to the documentation page of the resource
 
 To see which projects you are a member of:
 
@@ -85,6 +95,11 @@ until you push them up.
 A useful habit is to run ``fhir project status`` before synchronizing, and to commit your local
 changes to Git first, so you always have a way back.
 
+.. note::
+   ``sync``, ``pull`` and ``push`` work on the folder you are currently in, and use the link that
+   ``clone`` or ``link`` established for it. Use ``fhir project info`` to see which Simplifier
+   project a folder is connected to, and ``fhir project repair`` if that link got lost.
+
 Resolving conflicts
 -------------------
 
@@ -114,3 +129,16 @@ been committed locally yet.
 .. warning::
    Both strategies delete files that are missing on the winning side. Commit or back up your work
    before running a synchronization with a strategy.
+
+Packaging your project
+----------------------
+
+To turn your project into a distributable package or archive:
+
+.. code-block:: Bash
+
+     > fhir pack                #creates a FHIR package from the current project
+     > fhir project archive     #creates a generic archive from the current project
+
+See :ref:`Package management <Package_management>` for what to do with the resulting package, and
+:ref:`pipeline_integration` for automating any of this in CI/CD.

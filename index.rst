@@ -30,7 +30,6 @@ To install Firely Terminal please go to the `Firely Terminal download page <http
    Getting started <getting_started/getting_started>
    Package management <package_management/package_management>
    Working with Simplifier <Working-With-Simplifier>
-   Simplifier Sync <Simplifier-Sync>
    Quality-Control
    FHIR Client <FHIR-Client>
    FQL
