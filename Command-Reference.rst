@@ -1392,7 +1392,7 @@ With the source option set to scope, you get your project and all dependencies a
 With stack you get access to all resources on the stack. You can also provide any known server alias,
 or you can provide the URL of a FHIR server. You can also choose any Simplifier project.
 
-For information of the FQL language, visit https://simplifier.net/docs/fql
+For information of the FQL language, visit https://docs.fire.ly/projects/Simplifier/features/fql/fql.html
 
 ----
 
@@ -2160,7 +2160,7 @@ that bundle back onto the stack. If the resource is not a bundle, nothing happen
 
 The stack command lists the resources currently on the stack by type and id.
 You can optionally add an FQL query, if you want different data listed for this.
-For FQL see: https://simplifier.net/docs/FQL
+For FQL see: https://docs.fire.ly/projects/Simplifier/features/fql/fql.html
 Example: stack "from Resource select type(), id, meta.profile"
 
 ----

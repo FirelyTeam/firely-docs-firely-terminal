@@ -1,3 +1,5 @@
+.. _simplifier_sync:
+
 Simplifier Sync
 ===============
 
@@ -40,8 +42,8 @@ The intended workflow is as follows:
 * **Sync your project with Simplifier.**
 
 After a project is cloned you can see what is in the folder by using ``ls``, this will show you a list of all the content. 
-You will see that there is a package.json file in there. These are the dependencies that this project depends on. This is setup
-in Simplifier with the dependencies, but we also have to install them locally. You can install them by running the ``restore`` command.
+You will see that there is a package.json file in there. These are the dependencies that this project depends on. They are
+installed locally for you when you clone or link, but you can install them again at any time with the ``restore`` command.
 
 .. code-block:: Bash
 
