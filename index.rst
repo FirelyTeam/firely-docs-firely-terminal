@@ -23,6 +23,9 @@ Welcome to Firely Terminal's documentation!
 Firely Terminal is a cross platform FHIR command line tool that helps you working with files containing FHIR resources.
 To install Firely Terminal please go to the `Firely Terminal download page <https://simplifier.net/downloads/firely-terminal>`_ and follow the instructions.
 
+Running it in a pipeline is a common next step: see :ref:`automating_quality_control` to validate your
+FHIR project on every push or pull request and fail the build when something is wrong.
+
 .. toctree::
    :maxdepth: 1
    :caption: Firely Terminal documentation:
@@ -30,10 +33,11 @@ To install Firely Terminal please go to the `Firely Terminal download page <http
    Getting started <getting_started/getting_started>
    Package management <package_management/package_management>
    Working with Simplifier <Working-With-Simplifier>
+   Automating Simplifier Sync <Automating-Simplifier-Sync>
    Quality-Control
+   Automating quality control <Automating-Quality-Control>
    FHIR Client <FHIR-Client>
    FQL
-   Pipeline integration <Pipeline-Integration>
    Release-Notes
    Command Reference <Command-Reference>
 

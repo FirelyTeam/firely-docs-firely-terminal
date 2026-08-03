@@ -1159,10 +1159,19 @@ Quality Control
    * - ``--push``
      - flag
      - No
-     - Adds the resulting issues on the stack as a bundle of OperationOutcomes
+     - Adds the resulting issues on the stack as an OperationOutcome
+   * - ``--fail``
+     - flag
+     - No
+     - Return a non-zero exit code when there are error-level findings
 
 Check does a Quality Control check of your project. By default the "minimal" rule set is run.
 A more extended set of rules: "recommended" is also included with Firely Terminal by default.
+The "free" series runs without a Simplifier license, but does not validate resources.
+
+By default ``fhir check`` returns exit code 0 even when it finds issues; a non-zero exit code means
+the check could not run. Use ``--fail`` to return a non-zero exit code on error-level findings, for
+example to gate a CI pipeline. See :ref:`automating_quality_control`.
 
 You can also write your own rule sets. You can do that by creating a file that starts
 with a series name and ends with '.rules.yaml'. For example: mychecks.rules.yaml
@@ -1195,13 +1204,20 @@ For more information see https://docs.fire.ly/projects/Simplifier/develop/qualit
    * - ``--push``
      - flag
      - No
-     - Pushing the  operation outcome to the stack
+     - Pushing the operation outcome to the stack
+   * - ``--fail``
+     - flag
+     - No
+     - Return a non-zero exit code when there are error-level findings
 
 The validate command validates the resource on the top of the stack. The result is a set of issues that
 are printed to the output. An issue can be information, warning, error or fatal. The validation will check
 if the resource conforms to its base profile, but also to the profile claims of meta.profile.
 
-You can switch validator engine, with 'fhir config validator [engine]'
+You can switch validator engine with ``fhir config validate <flavor>``.
+
+To validate a whole project rather than a single resource - in a pipeline, for instance - use
+``fhir check``, whose rule series validate every resource they parse. See :ref:`automating_quality_control`.
 
 Resource Generation
 ===================

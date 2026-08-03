@@ -1,41 +1,20 @@
-.. _pipeline_integration:
+.. _automating_simplifier_sync:
 
-Pipeline integration
-====================
-
-Firely Terminal is a .NET command line tool, so it runs on any CI/CD platform that can install a
-.NET tool: GitHub Actions, Azure DevOps, GitLab CI, Jenkins, Bitbucket Pipelines, and others.
-Every pipeline boils down to the same three steps:
-
-1. Install the .NET SDK.
-2. Install Firely Terminal: ``dotnet tool install --global Firely.Terminal``.
-3. Run the ``fhir`` commands you need, for example :ref:`Quality Control <quality_control>` or a
-   :ref:`Simplifier sync <working_with_simplifier>`.
+Automating Simplifier Sync
+==========================
+Firely Terminal is a .NET command line tool, so this works on any CI/CD platform that can install a
+.NET tool — GitHub Actions, Azure DevOps, GitLab CI, Jenkins, Bitbucket Pipelines and others. Every
+pipeline boils down to the same three steps: install the .NET SDK, run
+``dotnet tool install --global Firely.Terminal``, then run the ``fhir`` commands you need.
 
 Store your Simplifier credentials as secrets or protected variables in your CI/CD platform.
 Never commit them to your repository.
-
-Quality Control in a pipeline
------------------------------
-
-For validating and quality-checking an Implementation Guide, we maintain a ready-made GitHub
-Actions workflow that also wraps the HL7 Java Validator. See our
-`firely-terminal-pipeline <https://github.com/FirelyTeam/firely-terminal-pipeline>`_ repository on
-how to set it up and deploy it. If you are on another platform, that repository is still a useful
-reference for which commands to run.
-
-Automating a Simplifier sync
-----------------------------
-
-There is no two-way synchronization between your Git host and Simplifier.net (see
-:ref:`working_with_simplifier`). A pipeline is the usual way to close that gap: on every push to
-your main branch, send the repository contents to the corresponding Simplifier project.
 
 Both examples below use ``--strategy TakeLocal``, because in this scenario Git is the source of
 truth: whatever is in the repository wins.
 
 GitHub Actions
-^^^^^^^^^^^^^^
+--------------
 
 Add the following as ``.github/workflows/sync-simplifier.yaml`` and configure
 ``SIMPLIFIER_USERNAME``, ``SIMPLIFIER_PASSWORD`` and ``SIMPLIFIER_PROJECT_URLKEY`` as repository
@@ -83,7 +62,7 @@ commit to ``main`` or ``develop``.
               fhir project sync
 
 Azure DevOps
-^^^^^^^^^^^^
+------------
 
 The same flow as an Azure Pipelines definition. Define ``SIMPLIFIER_USERNAME``,
 ``SIMPLIFIER_PASSWORD`` and ``SIMPLIFIER_PROJECTURLKEY`` as pipeline variables, and mark the
@@ -123,3 +102,5 @@ password as secret.
 .. note::
    Both examples run ``fhir project link`` before every sync. A fresh CI checkout has no link to
    Simplifier yet, so the link has to be (re)established on every run.
+
+To also validate your resources on every push, see :ref:`automating_quality_control`.

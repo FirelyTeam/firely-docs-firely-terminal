@@ -141,4 +141,4 @@ To turn your project into a distributable package or archive:
      > fhir project archive     #creates a generic archive from the current project
 
 See :ref:`Package management <Package_management>` for what to do with the resulting package, and
-:ref:`pipeline_integration` for automating any of this in CI/CD.
+:ref:`automating_simplifier_sync` for running the sync from a pipeline.
