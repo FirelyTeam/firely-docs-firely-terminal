@@ -118,11 +118,12 @@ one simple statement:
 
      > fhir snapshot
 
+After this the resource on the stack is replaced with a new
+StructureDefinition that contains the just generated snapshot.
+
 
 Validation
 ~~~~~~~~~~
-After this the resource on the stack is replaced with a new
-StructureDefinition that contains the just generated snapshot.
 
 The validate command validates the resource on the top of the stack,
 using the current :ref:`scope`.
@@ -135,8 +136,8 @@ Scope
 
 Validation needs a lot of data: from StructureDefinitions on the
 resource itself, to data types, Extensions and ValueSets. It will look
-into your project (current folder) and any packages, wether dependencies
-or depenencies of dependencies (etc.) to find all these assets.
+into your project (current folder) and any packages, whether dependencies
+or dependencies of dependencies (etc.) to find all these assets.
 
 Output
 ------
@@ -151,12 +152,19 @@ to the command line output.
 Parameters
 ----------
 
-You can use your own terminology server or specifiy an additional
-profile to validate against. For more details on these paremters, see:
+You can specify an additional profile to validate against, and choose which
+validator engine to use. For more details on these parameters, see:
 
 .. code-block:: Bash
 
    > fhir ? validate
+
+Validating a whole project
+--------------------------
+
+``fhir validate`` works on one resource at a time. To validate every resource in your project at
+once - which is what you want in a pipeline - use ``fhir check`` instead. See
+:ref:`automating_quality_control`.
 
 
 XML to JSON and vice versa
