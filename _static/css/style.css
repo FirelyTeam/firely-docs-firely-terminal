@@ -111,6 +111,7 @@ a.icon-home:hover {
  */
 .btn {
 	box-shadow: none;
+  border-radius: 5px;
 
 	display: inline-block;
 
@@ -123,7 +124,7 @@ a.icon-home:hover {
 .btn-neutral:visited {
 	background-color: #16a2c5 !important;
 
-	border-color: none;
+	border: none;
 
 	color: #fff !important;
 
@@ -138,6 +139,15 @@ a.icon-home:hover {
 	color: #fff;
 
 	text-decoration: none;
+}
+
+.rst-content .btn:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.rst-content .btn:focus-visible {
+  outline: 2px solid #117c97;
+  outline-offset: 2px;
 }
 
 a.btn span.fa {
@@ -202,4 +212,34 @@ div.wy-menu.rst-pro {
 
 .injected dd div {
 	padding: 6px 6px 6px 0 !important;
+}
+
+.banner-container {
+  background: #FDD106;
+  color: #fff;
+  padding: clamp(12px, 1.5vw, 20px) clamp(20px, 3vw, 40px);
+}
+
+.banner-container img {
+  height: clamp(16px, 3vw, 30px);
+}
+
+.banner-container h2 {
+  font-size: clamp(14px, 1.5vw, 28px);
+  font-weight: 800;
+  margin: 0;
+}
+
+.banner-container .btn {
+  text-decoration: none;
+  font-size: clamp(10px, 1.2vw, 16px);
+  padding: clamp(8px, 1vw, 10px) clamp(10px, 2vw, 20px);
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
 }

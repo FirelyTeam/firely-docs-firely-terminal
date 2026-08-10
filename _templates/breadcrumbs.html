@@ -2,7 +2,8 @@
 
 {% block breadcrumbs %}
 
-  <div><a href="https://simplifier.net/explore/trial"><img src="{{ pathto('_static/images/banner-simplifier.png', 1) }}" alt="Simplifier banner"/></a></div>
+{% include "banner.html" %}
+
   <hr/>
 	<li><a href="/">Firely Docs</a> &raquo;</li>
   <li><a href="{{ pathto(master_doc) }}">{{ project }}</a> &raquo;</li>
