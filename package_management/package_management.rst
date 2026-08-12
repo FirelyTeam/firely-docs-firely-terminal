@@ -16,4 +16,5 @@ In the pages below you will find more information on the possibilities of packag
   :titlesonly:
  
   Managing-Packages
+  Private-Package-Feeds
   Using-NPM-instead

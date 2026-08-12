@@ -1,155 +1,236 @@
-Package Management
-===================
+.. _managing_packages:
 
-Below you will find more information on the available commands for package management within Firely Terminal
+Managing packages
+=================
 
-Expansions and Snapshots
-------------------------
-All the Firely tools will create snapshots and expansions on the fly. Some tooling does not have this capability and can only use packages that already contain snapshots and/or expansions. We do not recommend using snapshots in a package since this may result in out dated snapshots in packages where by definition the content does not change. With the introduction of the bake pipeline we allow customization at package creation! You can start this easily on Simplifier by creating a ``package.bake.yaml`` file or create you own yaml file. 
+This page walks through the package commands of Firely Terminal, roughly in the order you need them.
+See the :ref:`command_reference` for the full list of parameters of each command.
 
-The sytax for creating your bake file is explained `here in our documentation <https://simplifier.net/docs/bake>`_. As you can see in the documentation there are a variety of options available. Besides the snapsthots and expansions, there are options for selecting a subset of resources, creating an .index.json file and transforming FHIR Shorthand files are available in the bake pipeline. 
+Making your folder a FHIR project
+---------------------------------
 
-It is also possible to create snapshots and expand valuesets for already existing packages by using the ``fhir inflate`` command. Inflate creates snapshots and/or expansions for the current project (or a specific package).
-
-**WARNING** ``fhir inflate`` changes the content of your current profiles and ValueSets permanently. If you want to do the opposite you can use ``fhir deflate`` to remove snapshots and expansions from you current project (or a specific package). 
-
-Versions
---------
-Lists all available versions of the package on the server
+A folder becomes a FHIR project as soon as it has a package manifest (``package.json``). Set the FHIR
+version first, then initialize:
 
 .. code-block:: Bash
 
-   > fhir versions simplifier.core.stu3
+   > fhir spec R4
+   > fhir init
 
-This shows you all the available versions of the package on the package
-server. What it does is that it fetches the *package listing* of that
-package from the server, which is a json document. To see that document,
-use the ``--raw`` flag. Example:
-
-.. code-block:: Bash
-
-   > fhir versions simplifier.core.stu3 --raw
-
-
-Cache
------
-
-The cache commands lists all the packages in the global package cache on
-your machine.
+``init`` creates the manifest, names the package after the folder, and adds a dependency on the FHIR
+core package of the selected version. You can override name and version:
 
 .. code-block:: Bash
 
-   > fhir cache 
+   > fhir init xyz.myprofiles 0.2.0
 
-If you want to know the folder location of the FHIR package cache, add
-the ``--location`` (or ``-l``)parameter:
+Installing packages
+-------------------
 
-.. code-block:: Bash
-
-   > fhir cache --location
-
-Semver
-------
-The semver command allows you to test if a version range is what you
-intended. It will show you the version of a package the range actually
-resolves to. If the package ``xyz.myprofiles`` has three versions:
-3.1.0, 3.2.0 and 4.0.0, the range ``3.x`` points to ``3.2.0`` Usage:
+The ``install`` command adds a package as a dependency of your project. It downloads the package into
+your package cache, adds it to ``package.json``, and then runs a restore so that all deep dependencies
+are resolved as well.
 
 .. code-block:: Bash
 
-   > fhir semver xyz.myprofiles 3.x
+   > fhir install xyz.myprofiles          #latest version
+   > fhir install xyz.myprofiles 2.3      #a specific version
+   > fhir install xyz.myprofiles 2.x      #the latest within a range
 
+Installing from a file
+~~~~~~~~~~~~~~~~~~~~~~
 
-Install
---------
-The install command can be used to install any FHIR package from the
-package server. It will install the package on your local machine and
-add a reference from your current folder to that package, by adding it
-to the ``package.json`` file (also known as a package manifest). You can
-provide just the package name, to get the latest.
-
-.. code-block:: Bash
-
-   > fhir install xyz.myprofiles 
-
-Or you can specify a specific version or range.
-
-.. code-block:: Bash
-
-   > fhir install xyz.myprofiles 2.3
-
-Folder install
-~~~~~~~~~~~~~~
-
-By default a package is installed in the global package cache of your
-machine. But you can specify to install it in the current folder with
-the ``--here`` (``-r``) flag.
-
-.. code-block:: Bash
-
-   > fhir install simplifier.core.stu3 --here
-
-This will install the latest version of package ``simplifier.core.stu3``
-as a subfolder of your current folder. In most scenario’s you should not
-need this option.
-
-Install a file
-~~~~~~~~~~~~~~
-
-If you have a package file that is not on the package server, for
-example you created it locally and want to test it, you cana install a
-package file (.tgz) from your current folder into the global package
-cache of your machine. For this you can use the ``--file`` (``-f``)
-flag.
+If you have a package file (``.tgz``) that is not on a package server — for example one you just built
+yourself and want to test — install it from disk with the ``--file`` (``-f``) flag:
 
 .. code-block:: Bash
 
    > fhir install thisproject.tgz --file
 
-
-Remove
--------
-If you have installed a package in your current project (folder), you
-can remove it. For a package called ‘xyz.myprofiles’ the command would
-be:
+Removing a package
+~~~~~~~~~~~~~~~~~~
 
 .. code-block:: Bash
 
    > fhir remove xyz.myprofiles
 
-This will not remove your package from your global packages cache, but
-it is no longer part of your current project. The command will update
-the manifest (package.json) and your lock file ``fhirpkg.lock.json`` ).
+This removes the reference from ``package.json`` and updates the lock file ``fhirpkg.lock.json``. The
+package itself stays in your package cache, so a reinstall does not need a download. ``fhir uninstall``
+does the same thing.
 
-Scope 
------
-Lists all the packages that are in scope for this folder context.
-
-.. code-block:: Bash
-
-   > fhir scope
-
-If you only want to know your direct dependencies, use:
+Restoring
+~~~~~~~~~
 
 .. code-block:: Bash
 
-   > fhir dependencies
+   > fhir restore
 
-or the short form:
+``restore`` rebuilds the full dependency closure of your project: it downloads every package referenced
+in ``package.json``, plus everything those packages depend on, and writes the result to
+``fhirpkg.lock.json``. It runs automatically after ``install`` and ``remove``.
+
+Run it manually after cloning an existing project from Git, after editing ``package.json`` by hand, or
+after :ref:`changing the package feed <private_package_feeds>`.
+
+.. note::
+   In case of version collisions the *closest-and-latest* strategy is used: a dependency closer to the
+   root of the tree wins over a deep dependency, and a higher version wins over a lower one.
+
+   There is no need to commit ``fhirpkg.lock.json`` to your repository; ``restore`` regenerates it.
+
+Inspecting your project
+-----------------------
 
 .. code-block:: Bash
 
-   > fhir deps 
+   > fhir deps           #your direct dependencies (short for 'fhir dependencies')
+   > fhir scope          #every package in scope, direct and deep
+   > fhir closure        #the dependency tree, showing where each package comes from
 
+``scope`` reads the lock file, so it tells you what a validation or resolve will actually see. If it
+reports that no closure was found, run ``fhir restore`` first.
 
-Other Commands
---------------
+To look inside a package rather than at the tree:
 
 .. code-block:: Bash
 
-  > fhir contents       #Displays the content from a packages
-  > fhir pack           #Creates a FHIR package from a folder
-  > fhir init           #Generates a FHIR package manifest 
-  > fhir restore        #Restores all packages referenced in this folders package file 
-  > fhir canonicals     #Lists canonicals from resources in a package or scope 
-  > fhir find           #Searches for package(s) by name or canonical
+   > fhir contents xyz.myprofiles.tgz    #files and dependencies of a package file
+   > fhir canonicals xyz.myprofiles      #canonical urls in an installed package
+   > fhir canonicals                     #canonical urls in the whole current scope
+
+``canonicals`` is the quickest way to find out whether a profile you expect is really in scope, and
+which package it comes from.
+
+Finding packages and versions
+-----------------------------
+
+Search the package server by name or by canonical:
+
+.. code-block:: Bash
+
+   > fhir find nictiz                                   #search by (partial) name
+   > fhir find http://fhir.nl/fhir                      #search by canonical
+   > fhir find --name nictiz --spec R4                  #filter on FHIR version
+
+List all published versions of a package. A star marks the versions you already have in your cache:
+
+.. code-block:: Bash
+
+   > fhir versions simplifier.core.stu3
+
+Add ``--raw`` to see the raw package listing document as the server returns it.
+
+Version ranges resolve according to SemVer. Use ``semver`` to check what a range in your manifest
+actually points to — if ``xyz.myprofiles`` has versions 3.1.0, 3.2.0 and 4.0.0, then ``3.x`` resolves to
+3.2.0:
+
+.. code-block:: Bash
+
+   > fhir semver xyz.myprofiles 3.x
+   > fhir semver xyz.myprofiles 3.x --list    #all versions, with an arrow at the match
+
+The package cache
+-----------------
+
+Downloaded packages are stored in a package cache, so that they are downloaded only once and can be
+shared between all your FHIR projects. By default this is the global cache of your machine, in your
+user profile.
+
+.. code-block:: Bash
+
+   > fhir cache list                #all packages in the cache used by this project
+   > fhir cache list --global       #force listing of the global cache
+   > fhir cache location            #tells you whether you use the global or a local cache
+   > fhir cache location --path     #the folder itself
+
+You can download a package into the cache without adding it as a dependency of your project:
+
+.. code-block:: Bash
+
+   > fhir cache install hl7.fhir.r4.core 4.0.1
+
+Using a local cache
+~~~~~~~~~~~~~~~~~~~
+
+Sometimes you want a project to have its own cache instead of the shared global one — for example on a
+build agent, or to keep private packages separate from your other work:
+
+.. code-block:: Bash
+
+   > fhir cache use-local           #creates a cache folder inside this project
+   > fhir cache use-global          #removes it and switches back to the global cache
+
+``use-global`` refuses to delete a local cache that still has content unless you add ``--confirm``.
+
+.. note::
+   The ``--here`` flag of ``fhir install`` has been removed. Use ``fhir cache use-local`` instead.
+
+If you just want the *contents* of a package on disk to look at, rather than a cache, use:
+
+.. code-block:: Bash
+
+   > fhir extract-package xyz.myprofiles                    #unpacks under the current folder
+   > fhir extract-package xyz.myprofiles --dependencies     #including its dependencies
+
+Snapshots and expansions
+------------------------
+
+All Firely tools generate snapshots and expansions on the fly. Some other tooling cannot, and can only
+work with packages that already contain them. If you do need them, generate them at packaging time with a ``package.bake.yaml`` script. Besides snapshots and
+expansions, bake can select a subset of resources, generate an ``.index.json`` and transform FHIR
+Shorthand files. The syntax is described in :ref:`the bake documentation <simplifier_docs:bake>`.
+
+For packages that already exist, use ``inflate``:
+
+.. code-block:: Bash
+
+   > fhir inflate                   #for the current project
+   > fhir inflate xyz.myprofiles    #for a package in your cache
+   > fhir deflate                   #removes snapshots and expansions again
+
+.. warning::
+   ``fhir inflate`` permanently changes the content of your profiles and ValueSets.
+
+Creating and publishing a package
+---------------------------------
+
+``pack`` builds a package file (a tarball) from your project:
+
+.. code-block:: Bash
+
+   > fhir pack
+   > fhir pack --name mypackage.tgz
+
+If a ``package.bake.yaml`` is present, bake runs as part of ``pack`` and its output goes straight into
+the package. Use ``fhir bake`` to preview that same output in a ``.bake`` folder without building a
+package. Bake is a licensed feature.
+
+Publishing a package to the package server requires a license and a Simplifier login:
+
+.. code-block:: Bash
+
+   > fhir login
+   > fhir publish-package mypackage.tgz --first
+
+The ``--first`` flag is required for the very first version of a package, to prevent accidental
+publishing of a mistyped package name. If your project has a feed configured, the package is published
+to that feed — see :ref:`private_package_feeds`.
+
+.. warning::
+   Once a package version is published it cannot be removed from the package server. Run your
+   :ref:`quality control <quality_control>` before you publish.
+
+Changing the package server
+---------------------------
+
+By default Firely Terminal resolves packages from ``https://packages.simplifier.net``, because it is the
+most complete FHIR package server. To see or change that:
+
+.. code-block:: Bash
+
+   > fhir source                                    #shows the current package server
+   > fhir source https://mypackageserver.org        #sets a different one
+   > fhir source https://myserver.org --npm         #for a plain NPM server
+
+This is a machine-wide setting. To consume *private* packages from Simplifier you do not change the
+source: use a feed instead, which is a per-project setting. See :ref:`private_package_feeds`.
