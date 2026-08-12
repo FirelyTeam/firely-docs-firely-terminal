@@ -209,7 +209,7 @@ Publishing a package to the package server requires a license and a Simplifier l
 
 .. code-block:: Bash
 
-   > fhir login email=<your email> password=<your password>
+   > fhir login
    > fhir publish-package mypackage.tgz --first
 
 The ``--first`` flag is required for the very first version of a package, to prevent accidental
