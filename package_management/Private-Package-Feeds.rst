@@ -52,8 +52,8 @@ with the feed, so the existing dependency closure is no longer necessarily valid
 Working with a feed
 -------------------
 
-Once a feed is configured, all package commands in that project use it. There is no separate flag: the
-feed determines both which packages you see and whether the request is authenticated.
+Once a feed is configured, all server-facing package commands in that project use it. There is no
+separate flag: the feed determines which remote packages you see and whether the request is authenticated.
 
 .. code-block:: Bash
 
