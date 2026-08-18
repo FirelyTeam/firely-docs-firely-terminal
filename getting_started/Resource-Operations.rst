@@ -82,7 +82,7 @@ as shown below:
 Snapshot Generation
 ~~~~~~~~~~~~~~~~~~~~
 To generate a snapshot for a StructureDefinition, Firely Terminal needs to have
-two thing in place: 
+two things in place:
 
 1. A StructureDefinition has to be on the stack. 
 2. The :ref:`scope <scope>` needs to be set. 
@@ -90,7 +90,7 @@ two thing in place:
 Get a StructureDefinition
 -------------------------
 
-A snapshot on the stack. You can do this by fetching a structure
+Put a StructureDefinition on the stack. You can do this by fetching a structure
 definition from a server or from disk;
 
 .. code-block:: Bash
@@ -119,7 +119,50 @@ one simple statement:
      > fhir snapshot
 
 After this the resource on the stack is replaced with a new
-StructureDefinition that contains the just generated snapshot.
+StructureDefinition that contains the just generated snapshot. Use ``fhir save``
+to write it back to disk.
+
+.. _snapshotting_a_project:
+
+Snapshotting a whole project or package
+---------------------------------------
+
+``fhir snapshot`` works on one resource at a time. To generate snapshots for *all* profiles
+at once - and expand all ValueSets along with them - use ``fhir inflate``. It always needs
+to be told *what* to inflate:
+
+.. code-block:: Bash
+
+   > fhir inflate --here                     #the current project (licensed)
+   > fhir inflate --package xyz.myprofiles   #a package in your cache
+   > fhir inflate --dependencies             #the packages your project depends on
+   > fhir deflate                            #removes the snapshots and expansions again
+
+.. note::
+   Inflating the current project (``--here``) requires a license, as does ``fhir deflate``
+   on it. Inflating a package (``--package``) or your dependencies does not.
+
+Add ``--snapshot`` or ``--expand`` to limit it to one of the two:
+
+.. code-block:: Bash
+
+   > fhir inflate --here --snapshot          #snapshots only, no ValueSet expansions
+
+Like ``fhir snapshot``, inflating resolves against the current :ref:`scope <scope>`, so
+install your dependencies first.
+
+Firely Terminal records that a folder has been inflated (in ``.inflator.json``), so running
+``fhir inflate`` on it a second time does nothing. Use ``--force`` to regenerate anyway, for
+example after changing a differential.
+
+.. warning::
+   ``fhir inflate`` rewrites the files it touches: the generated snapshots and expansions
+   become part of your profiles and ValueSets permanently. All Firely tools generate
+   snapshots on the fly, so you only need this when handing your resources to tooling that
+   cannot. Use ``fhir deflate`` to undo it.
+
+To get snapshots into a package at *packaging* time instead, use a ``package.bake.yaml``
+script - see :ref:`Managing packages <managing_packages>`.
 
 
 Validation
