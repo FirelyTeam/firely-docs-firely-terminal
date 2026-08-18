@@ -180,16 +180,9 @@ work with packages that already contain them. If you do need them, generate them
 expansions, bake can select a subset of resources, generate an ``.index.json`` and transform FHIR
 Shorthand files. The syntax is described in :ref:`the bake documentation <simplifier_docs:bake>`.
 
-For packages that already exist, use ``inflate``:
-
-.. code-block:: Bash
-
-   > fhir inflate                   #for the current project
-   > fhir inflate xyz.myprofiles    #for a package in your cache
-   > fhir deflate                   #removes snapshots and expansions again
-
-.. warning::
-   ``fhir inflate`` permanently changes the content of your profiles and ValueSets.
+For packages that already exist, ``fhir inflate`` adds snapshots and expansions after the
+fact - to a package in your cache, to your project, or to its dependencies. See
+:ref:`snapshotting_a_project`.
 
 Creating and publishing a package
 ---------------------------------
