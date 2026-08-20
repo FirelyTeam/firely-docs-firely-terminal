@@ -130,6 +130,53 @@ been committed locally yet.
    Both strategies delete files that are missing on the winning side. Commit or back up your work
    before running a synchronization with a strategy.
 
+Excluding files from upload
+---------------------------
+
+Not everything in your project folder belongs on Simplifier. Build output, CI configuration,
+pipeline definitions and IG publisher input folders are useful in Git but only add noise to your
+Simplifier project. Put a ``.simplifierupload`` file in the **root of your project folder** to say
+what should and should not be uploaded. It uses the same syntax as
+`the .simplifierupload file in Forge <https://docs.fire.ly/projects/Forge/features/IntegrationwithSimplifier.html#specifying-folders-and-or-files-to-ignore-when-uploading>`_
+and as Simplifier's GitHub synchronization.
+
+The rules:
+
+* Empty lines are ignored, and lines starting with ``#`` are comments.
+* A line with a pattern **includes** matching files: ``*.json``.
+* A line starting with ``!`` **excludes** matching files: ``!scripts/``.
+* ``*`` matches any characters within one path segment, ``**`` matches any number of segments.
+  Both ``/`` and ``\`` work as separator.
+* If the file contains **only** exclusion patterns, everything else is uploaded. As soon as you add
+  one inclusion pattern, the file becomes an allow list: everything that does not match an inclusion
+  pattern is left out.
+
+An example exclusion-only file for an IG repository that is synchronized with Simplifier:
+
+.. code-block:: text
+     !.github/
+     !fsh-generated/data/fsh-index.json
+     !input/
+     !scripts/
+     !feed.config.json
+
+.. important::
+   ``.simplifierupload`` only affects **untracked** files. A file is tracked once it exists on
+   Simplifier, or existed there the last time you synchronized. Adding a pattern for a file that is
+   already on Simplifier will not remove it; delete it on Simplifier (or through a synchronization
+   with ``--strategy TakeLocal`` after removing it locally) first.
+
+The file influences ``fhir project link``, ``fhir project push`` and ``fhir project sync`` in the
+upload direction only; downloads are never filtered. ``fhir project status`` tells you how many
+files and folders are being held back:
+
+.. code-block:: Bash
+
+     > fhir project status
+     3 folders and their containing files will be ignored in your project folder and will not be uploaded to Simplifier.net.
+     1 file will be ignored in your project folder and will not be uploaded to Simplifier.net.
+
+
 Packaging your project
 ----------------------
 
