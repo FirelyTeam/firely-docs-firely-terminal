@@ -298,8 +298,33 @@ The smallest pipeline that gates
           SIMPLIFIER_USERNAME: $(SIMPLIFIER_USERNAME)
           SIMPLIFIER_PASSWORD: $(SIMPLIFIER_PASSWORD)
 
-Define ``SIMPLIFIER_USERNAME`` and ``SIMPLIFIER_PASSWORD`` as GitHub repository secrets or as
-**secret** Azure pipeline variables.
+**GitLab CI** — ``.gitlab-ci.yml``, same sequence again. GitLab has no .NET setup task, so run the
+job in the .NET SDK image and put the global tools folder on the ``PATH`` yourself:
+
+.. code-block:: yaml
+
+    validate:
+      image: mcr.microsoft.com/dotnet/sdk:8.0
+      rules:
+        - if: $CI_COMMIT_BRANCH == "main"
+        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      before_script:
+        - dotnet tool install --global Firely.Terminal --version 3.5.0
+        - export PATH="$PATH:$HOME/.dotnet/tools"
+        - fhir -v
+      script:
+        - fhir login email=$SIMPLIFIER_USERNAME password=$SIMPLIFIER_PASSWORD
+        - fhir restore
+        - fhir check myrules --fail
+
+``dotnet tool install --global`` puts ``fhir`` in ``$HOME/.dotnet/tools``, which is not on the
+``PATH`` inside the SDK container — without that ``export`` the job dies on
+``fhir: command not found``. There is no ``set -euo pipefail`` here because GitLab already stops the
+job on the first failing ``script`` line.
+
+Define ``SIMPLIFIER_USERNAME`` and ``SIMPLIFIER_PASSWORD`` as GitHub repository secrets, as
+**secret** Azure pipeline variables, or as *Masked* GitLab CI/CD variables
+(**Settings > CI/CD > Variables**).
 
 .. _full_validation_example:
 
@@ -776,11 +801,13 @@ Adapting the examples
 * **Report without gating.** Drop the ``sys.exit(...)`` line at the end of the report step. The
   report is still attached to the run, but findings no longer fail the build.
 * **Treat warnings as errors.** Add ``by_sev['warning']`` to the same ``sys.exit`` expression.
-* **Other platforms.** GitLab CI, Jenkins, Bitbucket Pipelines and the rest need the same three
+* **Other platforms.** Jenkins, Bitbucket Pipelines and the rest need the same three
   things: a .NET SDK, ``dotnet tool install --global Firely.Terminal``, and the ``fhir`` commands
   above. Only the secret handling and the report plumbing are platform-specific.
 * **Runner requirements.** The examples use ``set -euo pipefail``, ``tee`` and ``python3``, so they
-  assume a Linux agent. ``ubuntu-latest`` on both GitHub and Azure DevOps has all three.
+  assume a Linux agent. ``ubuntu-latest`` on both GitHub and Azure DevOps has all three; the
+  ``dotnet/sdk`` container GitLab runs on does not ship ``python3``, so install it in the job (or
+  use a GitLab-hosted runner image that has it) before reusing the report step there.
 * **A second opinion.** To also run the official HL7 Java validator, the
   :ref:`pipeline action <firely_terminal_pipeline_action>` does it with one input on GitHub;
   elsewhere, download ``validator_cli.jar`` and add a step of your own.

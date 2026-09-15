@@ -10,7 +10,7 @@ pipeline boils down to the same three steps: install the .NET SDK, run
 Store your Simplifier credentials as secrets or protected variables in your CI/CD platform.
 Never commit them to your repository.
 
-Both examples below use ``--strategy TakeLocal``, because in this scenario Git is the source of
+All examples below use ``--strategy TakeLocal``, because in this scenario Git is the source of
 truth: whatever is in the repository wins.
 
 GitHub Actions
@@ -99,8 +99,37 @@ password as secret.
         SIMPLIFIER_USERNAME: $(SIMPLIFIER_USERNAME)
         SIMPLIFIER_PASSWORD: $(SIMPLIFIER_PASSWORD)
 
+GitLab CI
+---------
+
+The same flow as a ``.gitlab-ci.yml`` job. Define ``SIMPLIFIER_USERNAME``, ``SIMPLIFIER_PASSWORD``
+and ``SIMPLIFIER_PROJECT_URLKEY`` as CI/CD variables in **Settings > CI/CD > Variables**, and mark
+the password as *Masked*. This job is manual; uncomment the second rule to run it on every commit to
+``main`` or ``develop``.
+
+.. code-block:: yaml
+
+    sync-simplifier:
+      image: mcr.microsoft.com/dotnet/sdk:8.0
+      rules:
+        - when: manual          #play button in the pipeline view
+        #- if: $CI_COMMIT_BRANCH =~ /^(main|develop)$/
+      before_script:
+        - dotnet tool install --global Firely.Terminal > /dev/null
+        - export PATH="$PATH:$HOME/.dotnet/tools"
+      script:
+        - fhir -v
+        - fhir login email=$SIMPLIFIER_USERNAME password=$SIMPLIFIER_PASSWORD
+        - fhir project link $SIMPLIFIER_PROJECT_URLKEY --strategy TakeLocal
+        - fhir project sync
+
 .. note::
-   Both examples run ``fhir project link`` before every sync. A fresh CI checkout has no link to
+   ``dotnet tool install --global`` puts ``fhir`` in ``$HOME/.dotnet/tools``, which is not on the
+   ``PATH`` inside the SDK container. Exporting it — as above — is the fix for
+   ``fhir: command not found``.
+
+.. note::
+   Every example runs ``fhir project link`` before every sync. A fresh CI checkout has no link to
    Simplifier yet, so the link has to be (re)established on every run.
 
 To also validate your resources on every push, see :ref:`automating_quality_control`.
