@@ -10,8 +10,20 @@ pipeline boils down to the same three steps: install the .NET SDK, run
 Store your Simplifier credentials as secrets or protected variables in your CI/CD platform.
 Never commit them to your repository.
 
-Both examples below use ``--strategy TakeLocal``, because in this scenario Git is the source of
+All examples below use ``--strategy TakeLocal``, because in this scenario Git is the source of
 truth: whatever is in the repository wins.
+
+.. warning::
+   These are **examples, not maintained or tested by Firely**. They are working starting points
+   meant as inspiration — expect to adapt them to your repository layout and your platform, and to
+   test them before you rely on them.
+
+   Firely supports Firely Terminal, not your CI/CD platform. For the syntax, the runner images,
+   the secret handling and everything else around the ``fhir`` commands, follow your platform's own
+   documentation:
+   `GitHub Actions <https://docs.github.com/actions>`_,
+   `Azure Pipelines <https://learn.microsoft.com/azure/devops/pipelines>`_,
+   `GitLab CI/CD <https://docs.gitlab.com/ee/ci/>`_.
 
 GitHub Actions
 --------------
@@ -99,8 +111,47 @@ password as secret.
         SIMPLIFIER_USERNAME: $(SIMPLIFIER_USERNAME)
         SIMPLIFIER_PASSWORD: $(SIMPLIFIER_PASSWORD)
 
+GitLab CI
+---------
+
+The same flow as a ``.gitlab-ci.yml`` job. Define ``SIMPLIFIER_USERNAME``, ``SIMPLIFIER_PASSWORD``
+and ``SIMPLIFIER_PROJECT_URLKEY`` as CI/CD variables in **Settings > CI/CD > Variables**, and mark
+the password both *Masked* and *Protected*. This job is manual; uncomment the second rule to run it
+on every commit to ``main`` or ``develop``.
+
+.. code-block:: yaml
+
+    sync-simplifier:
+      image: mcr.microsoft.com/dotnet/sdk:8.0
+      rules:
+        #Protected refs only: the credentials are not exposed to any other branch.
+        - if: $CI_COMMIT_REF_PROTECTED == "true"
+          when: manual          #play button in the pipeline view
+        #- if: $CI_COMMIT_BRANCH =~ /^(main|develop)$/
+      before_script:
+        - dotnet tool install --global Firely.Terminal > /dev/null
+        - export PATH="$PATH:$HOME/.dotnet/tools"
+      script:
+        - fhir -v
+        - fhir login email=$SIMPLIFIER_USERNAME password=$SIMPLIFIER_PASSWORD
+        - fhir project link $SIMPLIFIER_PROJECT_URLKEY --strategy TakeLocal
+        - fhir project sync
+
+.. warning::
+   *Masked* only hides a variable in the job log; it does not control which jobs can read it. Any
+   job on any branch can print it to a file or post it elsewhere, so a contributor who can push a
+   branch can change ``.gitlab-ci.yml`` and take the password. *Protected* is the flag that matters:
+   it restricts the variable to pipelines on protected branches and tags. Mark the password as both,
+   and keep the sync job on protected refs as above — make ``main`` and ``develop`` protected
+   branches if they are not already.
+
 .. note::
-   Both examples run ``fhir project link`` before every sync. A fresh CI checkout has no link to
+   ``dotnet tool install --global`` puts ``fhir`` in ``$HOME/.dotnet/tools``, which is not on the
+   ``PATH`` inside the SDK container. Exporting it — as above — is the fix for
+   ``fhir: command not found``.
+
+.. note::
+   Every example runs ``fhir project link`` before every sync. A fresh CI checkout has no link to
    Simplifier yet, so the link has to be (re)established on every run.
 
 To also validate your resources on every push, see :ref:`automating_quality_control`.
