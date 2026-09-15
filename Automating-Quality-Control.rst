@@ -223,6 +223,13 @@ control over reporting.
    repository layout, your rule series and your platform, and to test them before you rely on them
    as a gate.
 
+   Firely supports Firely Terminal, not your CI/CD platform. For the syntax, the runner images,
+   the secret handling and everything else around the ``fhir`` commands, follow your platform's own
+   documentation:
+   `GitHub Actions <https://docs.github.com/actions>`_,
+   `Azure Pipelines <https://learn.microsoft.com/azure/devops/pipelines>`_,
+   `GitLab CI/CD <https://docs.gitlab.com/ee/ci/>`_.
+
 The smallest pipeline that gates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -323,8 +330,29 @@ job in the .NET SDK image and put the global tools folder on the ``PATH`` yourse
 job on the first failing ``script`` line.
 
 Define ``SIMPLIFIER_USERNAME`` and ``SIMPLIFIER_PASSWORD`` as GitHub repository secrets, as
-**secret** Azure pipeline variables, or as *Masked* GitLab CI/CD variables
+**secret** Azure pipeline variables, or as GitLab CI/CD variables
 (**Settings > CI/CD > Variables**).
+
+.. warning::
+   A validating series needs a license, so this job holds credentials — and it runs on merge
+   requests, where the branch being validated can change ``.gitlab-ci.yml`` itself. Marking the
+   GitLab variable *Masked* does not help: masking only redacts the job log, it does not stop a job
+   from writing the value somewhere else. Anyone who can push a branch can read it.
+
+   GitLab's *Protected* flag is the real control, but it withholds the variable from pipelines on
+   unprotected branches, which is exactly where merge requests run. So pick one:
+
+   * **Use a dedicated Simplifier CI account** whose only purpose is running quality control, and
+     leave the variable unprotected so merge requests can validate. Everyone with push access can
+     still read those credentials — the point is that they are worth little on their own.
+   * **Protect the credentials instead.** Mark the variable *Protected* and drop the
+     ``$CI_PIPELINE_SOURCE == "merge_request_event"`` rule, so licensed validation runs only on
+     protected branches. Merge requests then get no validation, or only ``fhir check free``, which
+     :ref:`does not validate <quality_control>`.
+
+   The same trade-off exists on GitHub and Azure DevOps — secrets are available to branch pull
+   requests from the same repository — GitLab just makes the choice explicit. Only pull requests
+   from forks are excluded by default on all three.
 
 .. _full_validation_example:
 

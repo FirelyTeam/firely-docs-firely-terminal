@@ -13,6 +13,18 @@ Never commit them to your repository.
 All examples below use ``--strategy TakeLocal``, because in this scenario Git is the source of
 truth: whatever is in the repository wins.
 
+.. warning::
+   These are **examples, not maintained or tested by Firely**. They are working starting points
+   meant as inspiration — expect to adapt them to your repository layout and your platform, and to
+   test them before you rely on them.
+
+   Firely supports Firely Terminal, not your CI/CD platform. For the syntax, the runner images,
+   the secret handling and everything else around the ``fhir`` commands, follow your platform's own
+   documentation:
+   `GitHub Actions <https://docs.github.com/actions>`_,
+   `Azure Pipelines <https://learn.microsoft.com/azure/devops/pipelines>`_,
+   `GitLab CI/CD <https://docs.gitlab.com/ee/ci/>`_.
+
 GitHub Actions
 --------------
 
@@ -104,15 +116,17 @@ GitLab CI
 
 The same flow as a ``.gitlab-ci.yml`` job. Define ``SIMPLIFIER_USERNAME``, ``SIMPLIFIER_PASSWORD``
 and ``SIMPLIFIER_PROJECT_URLKEY`` as CI/CD variables in **Settings > CI/CD > Variables**, and mark
-the password as *Masked*. This job is manual; uncomment the second rule to run it on every commit to
-``main`` or ``develop``.
+the password both *Masked* and *Protected*. This job is manual; uncomment the second rule to run it
+on every commit to ``main`` or ``develop``.
 
 .. code-block:: yaml
 
     sync-simplifier:
       image: mcr.microsoft.com/dotnet/sdk:8.0
       rules:
-        - when: manual          #play button in the pipeline view
+        #Protected refs only: the credentials are not exposed to any other branch.
+        - if: $CI_COMMIT_REF_PROTECTED == "true"
+          when: manual          #play button in the pipeline view
         #- if: $CI_COMMIT_BRANCH =~ /^(main|develop)$/
       before_script:
         - dotnet tool install --global Firely.Terminal > /dev/null
@@ -122,6 +136,14 @@ the password as *Masked*. This job is manual; uncomment the second rule to run i
         - fhir login email=$SIMPLIFIER_USERNAME password=$SIMPLIFIER_PASSWORD
         - fhir project link $SIMPLIFIER_PROJECT_URLKEY --strategy TakeLocal
         - fhir project sync
+
+.. warning::
+   *Masked* only hides a variable in the job log; it does not control which jobs can read it. Any
+   job on any branch can print it to a file or post it elsewhere, so a contributor who can push a
+   branch can change ``.gitlab-ci.yml`` and take the password. *Protected* is the flag that matters:
+   it restricts the variable to pipelines on protected branches and tags. Mark the password as both,
+   and keep the sync job on protected refs as above — make ``main`` and ``develop`` protected
+   branches if they are not already.
 
 .. note::
    ``dotnet tool install --global`` puts ``fhir`` in ``$HOME/.dotnet/tools``, which is not on the
