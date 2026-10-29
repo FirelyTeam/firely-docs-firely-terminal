@@ -32,9 +32,7 @@ Firely .NET SDK 6 and the legacy validator
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Firely Terminal is now built on the Firely .NET SDK 6 and Firely Validator 3.6.
-- The legacy (netsdk) validator is retired. ``fhir config validate netsdk`` is refused and the validator is no longer offered.
-- If you selected the netsdk validator in 3.5.0, ``fhir validate`` now stops and tells you to run ``fhir config validate firely``.
-- A Quality Control rule with ``flavor: netsdk`` is refused and tells you to set ``flavor: Firely`` in the rule.
+- The legacy (netsdk) validator is retired. A setting or Quality Control rule that still selects it stops with a message on how to switch to the Firely validator.
 - Parsing is stricter: a string where a boolean is expected, such as ``"active": "true"``, is now reported as invalid.
 
 Validation aligned with Simplifier
