@@ -4,7 +4,7 @@
 Firely Terminal -- Command Reference
 ====================================
 
-This is a complete reference of all available commands in Firely Terminal **v3.5.0**.
+This is a complete reference of all available commands in Firely Terminal **v4.0.0**.
 You can also view this information from the command line by running ``fhir -h`` or ``fhir --help``.
 For help on a specific command, use ``fhir ? <command>``.
 
@@ -303,11 +303,18 @@ snapshots will be generated when none is present in the StructureDefinition.
    * - ``<flavor>``
      - string
      - No
-     - Possible values: firely, netsdk
+     - Possible value: firely
 
-Firely Terminal has two validators: the "Firely" validator and the "netsdk" (legacy) validator.
-The legacy validator is an open source validator from the FHIR .NET SDK. The Firely validator
-is the validator used in Firely Products. This one is actively maintained and has more advanced validation.
+Firely Terminal validates with the "Firely" validator, the validator used across Firely products.
+Run ``fhir config validate`` without a value to see the current engine.
+
+The "netsdk" (legacy) validator from the FHIR .NET SDK was retired in Firely Terminal 4.0.0, and
+``fhir config validate netsdk`` is refused. If you selected it in an earlier version, the setting is
+kept when you update, and ``fhir validate`` stops until you switch:
+
+.. code-block:: Bash
+
+     > fhir config validate firely
 
 FHIR Client
 ===========
@@ -496,7 +503,7 @@ Inflation
 ``fhir deflate``
 ~~~~~~~~~~~~~~~~
 
-**Description:** Remove snapshots/expansions for project or package
+**Description:** Remove snapshots/expansions for project (licensed) or package
 
 .. list-table::
    :header-rows: 1
@@ -520,7 +527,7 @@ WARNING this changes the content of your current profiles and ValueSets permanen
 ``fhir expand``
 ~~~~~~~~~~~~~~~
 
-**Description:** Expands a ValueSet
+**Description:** Expands a ValueSet (licensed)
 
 The Expand command takes a ValueSet from the top of the stack, and expands that ValueSet.
 The result is placed back on the stack. The expand will go to 1 000 000 codes.
@@ -532,7 +539,7 @@ to be found in the current project scope.
 ``fhir inflate``
 ~~~~~~~~~~~~~~~~
 
-**Description:** Creates snapshots/expands ValueSets for a project or package
+**Description:** Creates snapshots/expands ValueSets for a project (licensed) or package
 
 .. list-table::
    :header-rows: 1
@@ -1026,7 +1033,7 @@ Publishing
 ``fhir bake``
 ~~~~~~~~~~~~~
 
-**Description:** Publishes to a given folder
+**Description:** Publishes to a given folder (licensed)
 
 .. list-table::
    :header-rows: 1
@@ -1159,19 +1166,31 @@ Quality Control
    * - ``--push``
      - flag
      - No
-     - Adds the resulting issues on the stack as an OperationOutcome
+     - Adds the resulting issues on the stack as a Bundle of OperationOutcomes
+   * - ``--output``
+     - flag with value
+     - No
+     - Saves the resulting issues to a file as a Bundle of OperationOutcomes, for example
+       ``qc.json`` or ``qc.xml``. The extension decides the format.
+   * - ``--fail-on``
+     - flag with value
+     - No
+     - Exit with code 1 when there are issues at this severity or above: ``error``, ``warning`` or ``info``
    * - ``--fail``
      - flag
      - No
-     - Return a non-zero exit code when there are error-level findings
+     - Deprecated, use ``--fail-on``. Exits with code 1 on any issue. Cannot be combined with ``--fail-on``.
 
 Check does a Quality Control check of your project. By default the "minimal" rule set is run.
 A more extended set of rules: "recommended" is also included with Firely Terminal by default.
 The "free" series runs without a Simplifier license, but does not validate resources.
 
 By default ``fhir check`` returns exit code 0 even when it finds issues; a non-zero exit code means
-the check could not run. Use ``--fail`` to return a non-zero exit code on error-level findings, for
+the check could not run. Use ``--fail-on error`` to return exit code 1 on error-level findings, for
 example to gate a CI pipeline. See :ref:`automating_quality_control`.
+
+``--push`` and ``--output`` give the same Bundle: one OperationOutcome per file, in the shape the
+HL7 Java validator uses. See :ref:`quality_control`.
 
 You can also write your own rule sets. You can do that by creating a file that starts
 with a series name and ends with '.rules.yaml'. For example: mychecks.rules.yaml
@@ -1205,14 +1224,25 @@ For more information see https://docs.fire.ly/projects/Simplifier/develop/qualit
      - flag
      - No
      - Pushing the operation outcome to the stack
+   * - ``--fail-on``
+     - flag with value
+     - No
+     - Exit with code 1 when there are issues at this severity or above: ``error``, ``warning`` or ``info``
    * - ``--fail``
      - flag
      - No
-     - Return a non-zero exit code when there are error-level findings
+     - Deprecated, use ``--fail-on error``. Exits with code 1 on error-level findings. Cannot be combined with ``--fail-on``.
 
 The validate command validates the resource on the top of the stack. The result is a set of issues that
 are printed to the output. An issue can be information, warning, error or fatal. The validation will check
 if the resource conforms to its base profile, but also to the profile claims of meta.profile.
+
+A resource with parsing issues, such as an unknown element, is still validated: the parsing issues are
+reported first, followed by the validation results. Content that is not a FHIR resource at all is
+reported and not validated.
+
+References to other resources in your project are resolved, so invariants that use ``resolve()`` are
+evaluated against the resource the reference points to.
 
 You can switch validator engine with ``fhir config validate <flavor>``.
 
@@ -1227,7 +1257,7 @@ Resource Generation
 
 **Aliases:** ``fhir gen``, ``fhir yamlgen``, ``fhir yaml-gen``
 
-**Description:** Generate resources with YAML. 
+**Description:** Generate resources with YAML (licensed)
 
 .. list-table::
    :header-rows: 1
@@ -1363,7 +1393,7 @@ Evaluates a FHIRPath predicate against the top of the stack. It will return eith
 ``fhir query``
 ~~~~~~~~~~~~~~
 
-**Description:** Runs an FQL script
+**Description:** Runs an FQL script (licensed)
 
 .. list-table::
    :header-rows: 1

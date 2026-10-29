@@ -31,9 +31,10 @@ add a rule series name to run a different one:
      > fhir check                    #runs the minimal rule set
      > fhir check recommended        #runs the recommended rule set
      > fhir check --list --details   #list the rules in the set without executing them
-     > fhir check --push             #put the resulting issues on the stack as an OperationOutcome
+     > fhir check --push             #put the resulting issues on the stack as a Bundle
+     > fhir check --output qc.json   #save the resulting issues to a file as a Bundle
 
-Firely Terminal ships with three rule series:
+Firely Terminal ships with the same rule series as Simplifier's default scripts:
 
 .. list-table::
    :header-rows: 1
@@ -44,25 +45,61 @@ Firely Terminal ships with three rule series:
      - What it does
    * - ``free``
      - **No**
-     - Parsing, id existence, version settings, canonical pinning. Needs no license.
+     - Parsing, a mandatory id on every resource, and the project's canonical claims. Needs no license.
    * - ``minimal``
      - Yes
-     - The default. Adds validation of all resources against the FHIR standard and their profiles.
+     - The default. Parsing, canonical claims, validation of all resources against the FHIR standard
+       and their profiles, unique StructureDefinition canonicals, and the ``manifest`` series.
+   * - ``manifest``
+     - No
+     - Checks ``package.json``: that there is exactly one, that its contents are valid, and its
+       dependencies.
    * - ``recommended``
      - Yes
-     - ``minimal`` plus snapshot, id, naming and uniqueness rules. What Firely advises for an IG.
+     - ``minimal`` plus no pre-generated snapshots, valid ids, StructureDefinition names without
+       spaces, and unique names. What Firely advises for an IG.
+
+.. note::
+   These series changed in Firely Terminal 4.0.0 to match Simplifier. ``minimal`` now includes
+   ``manifest``, so a ``package.json`` that misses a required field, such as ``author``, fails
+   ``minimal``. The mandatory id check moved from ``recommended`` to ``free``. Run
+   ``fhir check --list --details`` to see the rules in a series.
 
 Exit codes
 ----------
 
 ``fhir check`` **exits 0 even when it reports errors** — it prints ``FAIL:`` with the issue counts
 and still returns success. A non-zero exit code means the check could not run at all: no license, an
-unknown series, or not a project folder. Use ``--fail`` when you want error-level findings to return
-a non-zero exit code, for example to gate a pipeline:
+unknown series, or not a project folder. Use ``--fail-on`` to choose the severity that makes it exit
+with code 1, for example to gate a pipeline:
 
 .. code-block:: Bash
 
-     > fhir check recommended --fail
+     > fhir check recommended --fail-on error     #exit 1 on errors
+     > fhir check recommended --fail-on warning   #exit 1 on warnings and errors
+
+The older ``--fail`` flag still works but is deprecated. On ``fhir check`` it exits with code 1 on
+any issue, including warnings and information. It cannot be combined with ``--fail-on``.
+
+Results as FHIR
+---------------
+
+``--output`` and ``--push`` give the results as a ``Bundle`` of type ``collection`` with one
+``OperationOutcome`` per file, in the shape the HL7 Java validator uses, so tools that read one can
+read the other:
+
+* The file is named in the ``http://hl7.org/fhir/StructureDefinition/operationoutcome-file``
+  extension on each OperationOutcome. Issues that belong to the whole project, such as a missing
+  canonical claim, have their own OperationOutcome without it.
+* The message of each issue is in ``issue.details.text``, and the rule code in
+  ``issue.details.coding``.
+
+The extension of the ``--output`` file decides the format: ``.json`` or ``.xml``. Save it outside
+your project folder, or the next ``fhir check`` reads it as part of your project.
+
+.. note::
+   Before Firely Terminal 4.0.0, ``--push`` gave a single OperationOutcome, with the message in
+   ``issue.diagnostics`` and no file names. Tooling that reads it needs updating.
 
 Custom rule sets
 ----------------
