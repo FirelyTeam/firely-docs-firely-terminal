@@ -26,12 +26,18 @@ resolves against. Without it Firely Terminal has nothing to restore and cannot v
     {
       "name": "my.ig",
       "version": "1.0.0",
+      "author": "My Organization",
       "fhirVersions": ["4.0.1"],
       "dependencies": {
         "hl7.fhir.r4.core": "4.0.1",
         "fhir.r4.ukcore.stu2": "2.0.1"
       }
     }
+
+From Firely Terminal 4.0.0 the ``minimal`` and ``recommended`` series also check this file itself. A
+``package.json`` without an ``author``, without a FHIR core package such as ``hl7.fhir.r4.core`` in
+its dependencies, or with a name that is not at least two segments separated by a dot (``my.ig``)
+fails the check. A missing ``jurisdiction`` gives a warning.
 
 Keep ``dependencies`` in sync with what your profiles actually reference. An unresolved dependency
 makes validation report false errors rather than fail loudly, which is the most confusing way for a
@@ -112,9 +118,17 @@ step:
         deps = {k: (v if isinstance(v, str) else v.get('version'))
                 for k, v in (c.get('dependencies') or {}).items()}
         fhir_version = c.get('fhirVersion', '4.0.1')
+        fhir_versions = [fhir_version] if isinstance(fhir_version, str) else fhir_version
+        # SUSHI adds the core package implicitly; the manifest check needs it listed
+        core = {'4.0': 'hl7.fhir.r4.core', '4.3': 'hl7.fhir.r4b.core', '5.0': 'hl7.fhir.r5.core'}
+        if fhir_versions[0][:3] in core:
+            deps.setdefault(core[fhir_versions[0][:3]], fhir_versions[0])
+        publisher = c.get('publisher') or {}
+        author = publisher if isinstance(publisher, str) else publisher.get('name', '')
         json.dump({'name': c.get('id', 'temp.package'),
                    'version': str(c.get('version', '0.0.0')),
-                   'fhirVersions': [fhir_version] if isinstance(fhir_version, str) else fhir_version,
+                   'author': author,
+                   'fhirVersions': fhir_versions,
                    'dependencies': deps}, open('package.json', 'w'), indent=2)
         PY
       displayName: 'SUSHI build and package.json from sushi-config.yaml'
@@ -125,6 +139,9 @@ Two things to watch:
   to include that path or it will validate nothing.
 * ``sushi-config.yaml`` dependencies come in both short form (``hl7.fhir.us.core: 3.1.0``) and long
   form (with ``version:`` / ``uri:``); the snippet above handles both.
+* The snippet takes the ``author`` from ``publisher`` and adds the FHIR core package, which the
+  ``package.json`` checks in ``minimal`` require. Without a ``publisher`` in your SUSHI config, the
+  check reports the missing author.
 
 Failing the build
 -----------------
@@ -165,6 +182,11 @@ composite action that wraps the whole sequence — dependency resolution, option
    ``dotnet-version: 8.0.x`` below. To run Firely Terminal 4.0.0, set ``FIRELY_TERMINAL_VERSION: 4.0.0``
    and ``dotnet-version: 10.0.x``, and leave ``FIRELY_TERMINAL_VALIDATOR_ENGINE`` unset or at
    ``firely``: 4.0.0 no longer has the ``netsdk`` validator.
+
+   For a SUSHI project, also commit a complete ``package.json`` (see the prerequisites above) and
+   leave ``SUSHI_USE_CONFIG_DEPENDENCIES`` false, so the action uses your file. The ``package.json``
+   the action generates from ``sushi-config.yaml`` has no author, no FHIR core package and a name
+   without a dot, so it fails the checks that ``minimal`` and ``recommended`` run in 4.0.0.
 
 .. code-block:: yaml
 
