@@ -26,12 +26,18 @@ resolves against. Without it Firely Terminal has nothing to restore and cannot v
     {
       "name": "my.ig",
       "version": "1.0.0",
+      "author": "My Organization",
       "fhirVersions": ["4.0.1"],
       "dependencies": {
         "hl7.fhir.r4.core": "4.0.1",
         "fhir.r4.ukcore.stu2": "2.0.1"
       }
     }
+
+From Firely Terminal 4.0.0 the ``minimal`` and ``recommended`` series also check this file itself. A
+``package.json`` without an ``author``, without a FHIR core package such as ``hl7.fhir.r4.core`` in
+its dependencies, or with a name that is not at least two segments separated by a dot (``my.ig``)
+fails the check. A missing ``jurisdiction`` gives a warning.
 
 Keep ``dependencies`` in sync with what your profiles actually reference. An unresolved dependency
 makes validation report false errors rather than fail loudly, which is the most confusing way for a
@@ -58,10 +64,11 @@ Choosing a rule series
      - What it does
    * - ``free``
      - **No**
-     - Parsing, id existence, version settings, canonical pinning. Needs no license.
+     - Parsing, a mandatory id on every resource, and the project's canonical claims. Needs no license.
    * - ``minimal``
      - Yes
-     - The default. Adds validation of all resources against the FHIR standard and their profiles.
+     - The default. Adds validation of all resources against the FHIR standard and their profiles,
+       and checks ``package.json``.
    * - ``recommended``
      - Yes
      - ``minimal`` plus snapshot, id, naming and uniqueness rules. What Firely advises for an IG.
@@ -111,9 +118,17 @@ step:
         deps = {k: (v if isinstance(v, str) else v.get('version'))
                 for k, v in (c.get('dependencies') or {}).items()}
         fhir_version = c.get('fhirVersion', '4.0.1')
+        fhir_versions = [fhir_version] if isinstance(fhir_version, str) else fhir_version
+        # SUSHI adds the core package implicitly; the manifest check needs it listed
+        core = {'4.0': 'hl7.fhir.r4.core', '4.3': 'hl7.fhir.r4b.core', '5.0': 'hl7.fhir.r5.core'}
+        if fhir_versions[0][:3] in core:
+            deps.setdefault(core[fhir_versions[0][:3]], fhir_versions[0])
+        publisher = c.get('publisher') or {}
+        author = publisher if isinstance(publisher, str) else publisher.get('name', '')
         json.dump({'name': c.get('id', 'temp.package'),
                    'version': str(c.get('version', '0.0.0')),
-                   'fhirVersions': [fhir_version] if isinstance(fhir_version, str) else fhir_version,
+                   'author': author,
+                   'fhirVersions': fhir_versions,
                    'dependencies': deps}, open('package.json', 'w'), indent=2)
         PY
       displayName: 'SUSHI build and package.json from sushi-config.yaml'
@@ -124,6 +139,9 @@ Two things to watch:
   to include that path or it will validate nothing.
 * ``sushi-config.yaml`` dependencies come in both short form (``hl7.fhir.us.core: 3.1.0``) and long
   form (with ``version:`` / ``uri:``); the snippet above handles both.
+* The snippet takes the ``author`` from ``publisher`` and adds the FHIR core package, which the
+  ``package.json`` checks in ``minimal`` require. Without a ``publisher`` in your SUSHI config, the
+  check reports the missing author.
 
 Failing the build
 -----------------
@@ -134,13 +152,17 @@ Failing the build
    no license, an unknown series, or not a project folder.
 
 That is deliberate: a broken setup fails loudly instead of quietly reporting "no issues". But it
-means ``fhir check`` on its own is not a gate. Add ``--fail`` to turn error-level findings into a
-non-zero exit code:
+means ``fhir check`` on its own is not a gate. Add ``--fail-on error`` to turn error-level findings
+into exit code 1:
 
 .. code-block:: Bash
 
-     > fhir check myrules             #reports issues, always exits 0
-     > fhir check myrules --fail      #exits non-zero when there are errors
+     > fhir check myrules                    #reports issues, always exits 0
+     > fhir check myrules --fail-on error    #exits 1 when there are errors
+     > fhir check myrules --fail-on warning  #exits 1 on warnings too
+
+``--fail-on`` was added in Firely Terminal 4.0.0. The older ``--fail`` flag still works but is
+deprecated: on ``fhir check`` it exits 1 on *any* issue, warnings and information included.
 
 One flag is enough for most pipelines. If you also want a report or an artifact out of the run, see
 :ref:`the full example <full_validation_example>`, which gates differently and explains why.
@@ -154,6 +176,17 @@ If you are on GitHub, start here. We maintain
 `FirelyTeam/firely-terminal-pipeline <https://github.com/FirelyTeam/firely-terminal-pipeline>`_, a
 composite action that wraps the whole sequence — dependency resolution, optional SUSHI build,
 ``fhir check --fail``, and optionally the official HL7 Java validator as a second opinion.
+
+.. note::
+   The action installs Firely Terminal 3.5.0 by default, which runs on .NET 8, hence
+   ``dotnet-version: 8.0.x`` below. To run Firely Terminal 4.0.0, set ``FIRELY_TERMINAL_VERSION: 4.0.0``
+   and ``dotnet-version: 10.0.x``, and leave ``FIRELY_TERMINAL_VALIDATOR_ENGINE`` unset or at
+   ``firely``: 4.0.0 no longer has the ``netsdk`` validator.
+
+   For a SUSHI project, also commit a complete ``package.json`` (see the prerequisites above) and
+   leave ``SUSHI_USE_CONFIG_DEPENDENCIES`` false, so the action uses your file. The ``package.json``
+   the action generates from ``sushi-config.yaml`` has no author, no FHIR core package and a name
+   without a dot, so it fails the checks that ``minimal`` and ``recommended`` run in 4.0.0.
 
 .. code-block:: yaml
 
@@ -252,11 +285,11 @@ The smallest pipeline that gates
 
           - uses: actions/setup-dotnet@v4
             with:
-              dotnet-version: 8.0.x
+              dotnet-version: 10.0.x
 
           - name: Install Firely Terminal
             run: |
-              dotnet tool install --global Firely.Terminal --version 3.5.0
+              dotnet tool install --global Firely.Terminal --version 4.0.0
               fhir -v
 
           - name: Validate
@@ -267,7 +300,7 @@ The smallest pipeline that gates
               set -euo pipefail
               fhir login email=$SIMPLIFIER_USERNAME password=$SIMPLIFIER_PASSWORD
               fhir restore
-              fhir check myrules --fail
+              fhir check myrules --fail-on error
 
 **Azure DevOps** — one pipeline definition, same sequence:
 
@@ -287,11 +320,11 @@ The smallest pipeline that gates
       - task: UseDotNet@2
         displayName: Setup .NET SDK
         inputs:
-          version: 8.0.x
+          version: 10.0.x
 
       - script: |
           set -euo pipefail
-          dotnet tool install --global Firely.Terminal --version 3.5.0
+          dotnet tool install --global Firely.Terminal --version 4.0.0
           fhir -v
         displayName: Install Firely Terminal
 
@@ -299,7 +332,7 @@ The smallest pipeline that gates
           set -euo pipefail
           fhir login email=$SIMPLIFIER_USERNAME password=$SIMPLIFIER_PASSWORD
           fhir restore
-          fhir check myrules --fail
+          fhir check myrules --fail-on error
         displayName: Validate
         env:
           SIMPLIFIER_USERNAME: $(SIMPLIFIER_USERNAME)
@@ -311,18 +344,18 @@ job in the .NET SDK image and put the global tools folder on the ``PATH`` yourse
 .. code-block:: yaml
 
     validate:
-      image: mcr.microsoft.com/dotnet/sdk:8.0
+      image: mcr.microsoft.com/dotnet/sdk:10.0
       rules:
         - if: $CI_COMMIT_BRANCH == "main"
         - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       before_script:
-        - dotnet tool install --global Firely.Terminal --version 3.5.0
+        - dotnet tool install --global Firely.Terminal --version 4.0.0
         - export PATH="$PATH:$HOME/.dotnet/tools"
         - fhir -v
       script:
         - fhir login email=$SIMPLIFIER_USERNAME password=$SIMPLIFIER_PASSWORD
         - fhir restore
-        - fhir check myrules --fail
+        - fhir check myrules --fail-on error
 
 ``dotnet tool install --global`` puts ``fhir`` in ``$HOME/.dotnet/tools``, which is not on the
 ``PATH`` inside the SDK container — without that ``export`` the job dies on
@@ -364,10 +397,11 @@ turns that log into a markdown report attached to the run summary, and publishes
 an artifact — which is what you want when the pipeline runs on pull requests, or when someone else
 has to act on the findings.
 
-The report is built by parsing ``fhir check``'s console output, because **only the console output
-names the file each issue came from**. ``fhir check --push`` gives you a machine-readable
-``OperationOutcome``, but it carries no file paths, which is the first thing anyone asks about a
-failed validation run.
+The report is built by parsing ``fhir check``'s console output, because the console output names the
+file each issue came from, which is the first thing anyone asks about a failed validation run. From
+Firely Terminal 4.0.0, ``fhir check --output qc.json`` gives the same results as a machine-readable
+Bundle with one OperationOutcome per file (see :ref:`quality_control`), which is a sturdier source
+for a report of your own than the console output.
 
 It works like this:
 
@@ -406,7 +440,7 @@ It works like this:
       vmImage: ubuntu-latest
 
     variables:
-      FIRELY_TERMINAL_VERSION: 3.5.0
+      FIRELY_TERMINAL_VERSION: 4.0.0
       # Rule series name = the "<series>.rules.yaml" filename prefix, not a path.
       QC_RULE_SERIES: myrules
 
@@ -414,7 +448,7 @@ It works like this:
       - task: UseDotNet@2
         displayName: Setup .NET SDK
         inputs:
-          version: 8.0.x
+          version: 10.0.x
 
       - script: |
           set -euo pipefail
@@ -541,7 +575,7 @@ It works like this:
       workflow_dispatch:
 
     env:
-      FIRELY_TERMINAL_VERSION: 3.5.0
+      FIRELY_TERMINAL_VERSION: 4.0.0
       # Rule series name = the "<series>.rules.yaml" filename prefix, not a path.
       QC_RULE_SERIES: myrules
 
@@ -554,7 +588,7 @@ It works like this:
           - name: Setup .NET SDK
             uses: actions/setup-dotnet@v4
             with:
-              dotnet-version: 8.0.x
+              dotnet-version: 10.0.x
 
           - name: Install Firely Terminal
             run: |
@@ -671,10 +705,10 @@ It works like this:
    your own repository you will probably want it in a file — ``scripts/validation-report.py`` — and
    the step reduced to ``python3 scripts/validation-report.py``.
 
-Why the full example does not use ``--fail``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Why the full example does not use ``--fail-on``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Under ``set -euo pipefail``, ``fhir check --fail`` makes the check step itself fail, so the report
+Under ``set -euo pipefail``, ``fhir check --fail-on error`` makes the check step itself fail, so the report
 step never runs and you get no report on exactly the builds that need one. When a pipeline produces
 a report, let ``fhir check`` exit 0 and make the report step the gate.
 
@@ -691,7 +725,7 @@ The pipeline runs nothing you cannot run yourself. From your project folder:
      > fhir login email=<your email> password=<your password>
      > fhir restore
      > fhir check myrules              #the same validation the pipeline runs
-     > fhir check myrules --fail       #and the same exit code it gates on
+     > fhir check myrules --fail-on error   #and the same exit code it gates on
 
 To reproduce the full example locally, including the markdown report, the script below runs the
 identical sequence and exits 1 exactly where CI would fail. Save it as ``Test-Validation.ps1``:
@@ -701,7 +735,7 @@ identical sequence and exits 1 exactly where CI would fail. Save it as ``Test-Va
     [CmdletBinding()]
     param(
         [string]$Series = 'myrules',
-        [string]$TerminalVersion = '3.5.0',
+        [string]$TerminalVersion = '4.0.0',
         [switch]$Login,     # prompts for Simplifier credentials
         [switch]$Restore    # re-resolve package.json dependencies
     )

@@ -52,7 +52,7 @@ commit to ``main`` or ``develop``.
           - name: Setup .NET
             uses: actions/setup-dotnet@v4
             with:
-              dotnet-version: '8.0.x'
+              dotnet-version: '10.0.x'
 
           - name: Install Firely.Terminal
             run: |
@@ -91,7 +91,7 @@ password as secret.
     steps:
     - task: UseDotNet@2
       inputs:
-        version: '8.x'
+        version: '10.x'
 
     - script: |
         if ! command -v fhir &> /dev/null; then
@@ -122,7 +122,7 @@ on every commit to ``main`` or ``develop``.
 .. code-block:: yaml
 
     sync-simplifier:
-      image: mcr.microsoft.com/dotnet/sdk:8.0
+      image: mcr.microsoft.com/dotnet/sdk:10.0
       rules:
         #Protected refs only: the credentials are not exposed to any other branch.
         - if: $CI_COMMIT_REF_PROTECTED == "true"

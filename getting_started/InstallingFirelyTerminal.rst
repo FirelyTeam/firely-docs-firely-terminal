@@ -3,6 +3,23 @@ Installing Firely Terminal
 
 Go to the `Firely Terminal download page <https://simplifier.net/downloads/firely-terminal>`_ for instructions on how to install Firely Terminal.
 
+.. important::
+   Firely Terminal 4.0.0 and later require the `.NET 10 SDK <https://dotnet.microsoft.com/download/dotnet/10.0>`_.
+   Install it before you install or update Firely Terminal. You can keep other .NET versions installed next to it.
+
+   With only an older SDK installed, ``dotnet tool install`` and ``dotnet tool update`` fail with
+   *Settings file 'DotnetToolSettings.xml' was not found in the package*. That message comes from
+   .NET and does not mention the version: install the .NET 10 SDK and run the command again.
+
+   ===================== =================
+   Firely Terminal       .NET SDK required
+   ===================== =================
+   4.0.0 and later       .NET 10
+   3.3.0 to 3.5.x        .NET 8
+   3.0.0 to 3.2.x        .NET 6
+   Before 3.0.0          .NET Core 3.1
+   ===================== =================
+
 Install Firely Terminal:
 
 ``dotnet tool install -g firely.terminal``
@@ -22,8 +39,8 @@ Firely Terminal can be used cross platform. For Linux and Mac you need to make s
 
 The workflow for both platforms: 
 
-1. Make sure you have installed .NET SDK 6 if you are using Firely terminal 3.0.0 or later versions.
-    - You can have other versions of the SDK and runtimes, but you should at least have .NET 3.1 for FT versions < 3.0.0 and .NET 6.0 for FT versions >= 3.0.0. 
+1. Make sure you have installed the .NET 10 SDK, which Firely Terminal 4.0.0 and later require.
+    - You can have other versions of the SDK and runtimes installed next to it. For older versions of Firely Terminal, see the table at the top of this page.
 
 2. Install Firely Terminal using the `Firely Terminal download command <https://simplifier.net/downloads/firely-terminal>`_
     - ``dotnet tool install -g firely.terminal``
