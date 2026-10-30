@@ -7,7 +7,7 @@ This page contains the release notes of the current major version of Firely Term
 Current Release
 ~~~~~~~~~~~~~~~
 
-Release 4.0.0, November XXth, 2026
+Release 4.0.0, October 30th, 2026
 ----------------------------------
 
 Firely Terminal 4.0.0 moves to the Firely .NET SDK 6 and .NET 10, and brings validation and Quality Control in line with Simplifier.
